@@ -11970,7 +11970,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -11985,7 +11986,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -15010,7 +15012,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -15025,7 +15028,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -15277,7 +15281,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -15292,7 +15297,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -18497,7 +18503,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -18512,7 +18519,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -18826,7 +18834,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -18841,7 +18850,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -19111,7 +19121,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -19126,7 +19137,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -22511,7 +22523,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -22526,7 +22539,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -22858,7 +22872,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -22873,7 +22888,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -23205,7 +23221,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -23220,7 +23237,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -23508,7 +23526,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -23523,7 +23542,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -27088,7 +27108,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -27103,7 +27124,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -27453,7 +27475,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -27468,7 +27491,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -27818,7 +27842,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -27833,7 +27858,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -28183,7 +28209,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -28198,7 +28225,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -28504,7 +28532,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -28519,7 +28548,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -32264,7 +32294,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -32279,7 +32310,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -32647,7 +32679,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -32662,7 +32695,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -33030,7 +33064,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -33045,7 +33080,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -33413,7 +33449,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -33428,7 +33465,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -33796,7 +33834,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -33811,7 +33850,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />
@@ -34135,7 +34175,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
@@ -34150,7 +34191,8 @@
             <Action type="0" message="2304" wParam="0" lParam="0" sParam="" />
 					<!-- 箭頭左鍵*2 -->
 			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
-					<!-- backspace鍵 -->
+			<Action type="0" message="2326" wParam="0" lParam="0" sParam="" />
+					<!-- backspace鍵*2 -->
             <Action type="1" message="2170" wParam="0" lParam="0" sParam="1" />
 					<!-- 改<staff id >，改成1 -->
 			<Action type="2" message="0" wParam="41008" lParam="0" sParam="" />

@@ -1,0 +1,6 @@
+<tpc> 裡面的數字代表的意思
+https://musescore.org/en/plugin-development/tonal-pitch-class-enum
+
+樂曲的調性
+http://www.midi.twmail.net/musicclass01.htm
+

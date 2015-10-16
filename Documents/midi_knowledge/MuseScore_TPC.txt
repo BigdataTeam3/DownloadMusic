@@ -1,3 +1,5 @@
+10/16 補充
+
 <tpc> 裡面的數字代表的意思
 https://musescore.org/en/plugin-development/tonal-pitch-class-enum
 

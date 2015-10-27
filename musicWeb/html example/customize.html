@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+ 	<head>
+     	<meta charset="UTF-8">
+		<link rel="stylesheet" href="main.css">
+		<script src="new.js"></script>
+		<title>Customize Video</title>
+	</head>
+	<body>
+		<div id="skin">
+			<video width="640" id="myMovie">
+			<source src="videos/videoplayback.mp4">
+			<track src="temp.vtt" srclang="en" kind="subtitles" label="English" default>
+			</video>
+			<nav>
+				<div id="buttons">
+					<button id="playButton">Play</button>
+					<button id="stopButton">STOP</button>			
+					<button id="upButton">UP</button>		
+					<button id="downButton">DOWN</button>	
+					<button id="mutueButton">MUTUE</button>
+					<div id="nowVolume"></div>
+				</div>
+				<div style="clear:both">
+				</div>
+				
+				<div id="defaultBar">
+					<div id="progressBar"></div>
+				</div>
+				<div id="nowTime"></div>
+				<div style="clear:both">
+				</div>
+			</nav>
+		</div>
+	</body>
+</html>

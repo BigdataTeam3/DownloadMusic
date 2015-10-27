@@ -1,0 +1,59 @@
+#skin{
+	border:3px dotted blue;
+	width:700px;
+	margin:50px auto;
+	text-align:center;
+	padding:20px;
+	border-radius:8px;
+}
+nav{
+	margin:6px auto;
+/*	border:1px solid steelblue;*/
+}
+button{
+	background:white;
+	width:90px;
+	height:30px;
+}
+#buttons{
+	margin:6px 6px 1px 3px;
+	width:600px; 
+	float:left;
+	padding:10px 10px;
+}
+#playButton{
+	border-radius:16px; 
+	}
+#stopButton{
+	border-radius:16px; 
+	}
+#upButton{
+	border-radius:16px; 
+	}
+#downButton{
+	border-radius:16px; 
+	}
+#mutueButton{
+	border-radius:16px; 
+	}
+#defaultBar{
+	border:1px solid steelblue;
+	width:604px;
+	height:16px;
+	float:left;
+	padding:4px;
+	border-radius:16px;
+}
+#progressBar{
+	background:steelblue;
+	width:0px;
+	height:16px;
+	border-radius:16px; 
+}
+#nowVolume{
+	color : red;
+	float:right;
+} 
+#nowTime{
+	padding : 10px 20px;
+}

@@ -1,0 +1,2 @@
+在命令列打 Determine_Chord_final.py ***.mscx 
+會產生檔案 ***.txt 裡面是判斷的和弦

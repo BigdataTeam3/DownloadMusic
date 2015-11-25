@@ -1,0 +1,11 @@
+{
+'musicname' : 'original filename',
+'staff_id' : int,
+'start' : int, (number of start measure)
+'end' : int, (number of end measure)
+'tempo' : int,
+'timesig' : '4/4' or '6/8' or..., (time signature)
+'beats' : '1/4,0; 1/2,1; 1/8,1; 1/8,0', (假設為4/4拍，左為一單位的拍子，順序為：四分休止符、二分音符、八分音符、八分休止符，1/4 + 1/2 + 1/8 + 1/8 = 1) (實際上拍子長度為小數型式如0.25, 0.125, 0.0625)
+'instrument' : string, (此Staff代表的樂器)
+'instsrc' : string (此Staff選用的樂器)
+}

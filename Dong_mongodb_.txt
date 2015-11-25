@@ -1,7 +1,11 @@
 檔案已轉pitch＆keysig的accidental為0
-
+======================================================
+以下為dbname&&collectname 
+client = MongoClient('mongodb://10.120.30.8:27017')
+db = client['music']  
+collect = db['mscx_c_key']
+======================================================
 欄位名稱：欄位內容
-
 _id：檔案名稱
 data：檔案
 tonality：major(主旋律有大調)否則是minor

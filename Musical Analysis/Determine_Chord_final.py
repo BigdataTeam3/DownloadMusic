@@ -61,7 +61,8 @@ sigD = Decimal(staff1TimeSig.find('sigD').text)
 time['measure'] = sigN/sigD
 l = []
 dic = {}
-for staff in music.select('Score > Staff'):
+nonpitched = set(map(lambda x: x.get('id') if x.StaffType.get('group') != 'pitched' else 0,music.select('Part > Staff')))
+for staff in set(music.select('Score > Staff'))-nonpitched:
     time_acc = 0
     tupletID = ''
     tupletRatio = 1

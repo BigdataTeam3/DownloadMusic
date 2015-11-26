@@ -187,7 +187,7 @@ def melody(addr):
     avg.append(1)
     dframe = dframe/avg
     
-    f2 = open('Maindata.csv','a')
+    f2 = open('mainfun.csv','w')
     dframe.to_csv(f2, header=False, index=False)
     f2.close()
     return dframe

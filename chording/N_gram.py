@@ -22,6 +22,8 @@ def N_gram_main_function_multiple(Dominantlist,N_gram_number,Compare_number):
 		Dominantlist_8_gram_number(Dominantlist,N_gram_number,Compare_number)
 	elif N_gram_number == 16:
 		Dominantlist_16_gram_number(Dominantlist,N_gram_number,Compare_number)
+	elif N_gram_number == 32:
+		Dominantlist_16_gram_number(Dominantlist,N_gram_number,Compare_number)
 	else :
 		print "請重新輸入N-gram-number，4 or 8 or 16".decode('cp950')
 
@@ -79,6 +81,23 @@ def Dominantlist_16_gram_number(Dominantlist,N_gram_number,Compare_number):
 #     開始分類
 	Compare_list3 = Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number)
 	
+	
+#一次抓32個
+
+def Dominantlist_32_gram_number(Dominantlist,N_gram_number,Compare_number):
+#     print Dominantlist
+	Dominantgram_32freq = Dominantlist_to_Dominantgram(Dominantlist,N_gram_number)
+#     print Dominantgram_32freq
+	Dominantdict_32freq = Dominantgram_to_Dominantdict(Dominantgram_32freq)
+#     print Dominantdict_32freq
+	Dominantsorted_32freq = sorted(Dominantdict_32freq.items(), key=itemgetter(1), reverse=True)
+#     print Dominantsorted_32freq
+#     清除可能的和弦位移
+	Compare_list = Dominantsorted_possible_transfer_clean(Dominantsorted_32freq)
+#     這裡可以改比對的參數，以第幾個去比對
+	Compare_Dominant,Compare_number = Dominantclean_to_Dominantcompare(Compare_list,Dominantsorted_32freq,Compare_number)
+#     開始分類
+	Compare_list3 = Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number)
 	
 #===============================================================
 #以下是共用def

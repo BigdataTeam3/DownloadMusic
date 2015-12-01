@@ -14,7 +14,7 @@ def N_gram_main_function_single(Dominantlist):
 	elif int(N_gram_number) == 32:
 		Dominantlist_16_gram_number(Dominantlist,int(N_gram_number))
 	else :
-		print "請重新輸入N-gram-number，4 or 8 or 16".decode('cp950')
+		print "請重新輸入N-gram-number，4 or 8 or 16 or 32".decode('cp950')
 		N_gram_main_function(Dominantlist)
 
 def N_gram_main_function_multiple(Dominantlist,N_gram_number,Compare_number):

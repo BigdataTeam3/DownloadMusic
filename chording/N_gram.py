@@ -4,12 +4,14 @@ import csv,sys
 from math import log
 
 def N_gram_main_function_single(Dominantlist):
-	N_gram_number = raw_input("請輸入N-gram-number，4 or 8 or 16".decode('cp950'))
+	N_gram_number = raw_input("請輸入N-gram-number，4 or 8 or 16 or 32".decode('cp950'))
 	if int(N_gram_number) == 4:
 		Dominantlist_4_gram_number(Dominantlist,int(N_gram_number))
 	elif int(N_gram_number) == 8:
 		Dominantlist_8_gram_number(Dominantlist,int(N_gram_number))
 	elif int(N_gram_number) == 16:
+		Dominantlist_16_gram_number(Dominantlist,int(N_gram_number))
+	elif int(N_gram_number) == 32:
 		Dominantlist_16_gram_number(Dominantlist,int(N_gram_number))
 	else :
 		print "請重新輸入N-gram-number，4 or 8 or 16".decode('cp950')
@@ -25,7 +27,7 @@ def N_gram_main_function_multiple(Dominantlist,N_gram_number,Compare_number):
 	elif N_gram_number == 32:
 		Dominantlist_16_gram_number(Dominantlist,N_gram_number,Compare_number)
 	else :
-		print "請重新輸入N-gram-number，4 or 8 or 16".decode('cp950')
+		print "請重新輸入N-gram-number，4 or 8 or 16 or 32".decode('cp950')
 
 #一次抓4個
 	

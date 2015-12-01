@@ -67,7 +67,7 @@ def comb_chords(result_chords):
 		for time in sorted(result_chords[staff]):
 			sorted_chord[staff].append((result_chords[staff][time]))
 	t = tuple(sorted_chord.values())
-	chord_more_than_1 = map(lambda *args: reduce(lambda x,y: x|y,filter(lambda l:len(l)>1,args)) if filter(lambda l:l is not None and len(l)>1,args) else set(),*t)
+	chord_more_than_1 = map(lambda *args: reduce(lambda x,y: x|y if y is not None else x,filter(lambda l:len(l)>1,args)) if filter(lambda l:l is not None and len(l)>1,args) else set(),*t)
 	chord_1 = map(lambda *args: reduce(lambda x,y: x|y,args),*t)
 	return map(lambda x,y: x if len(x)>0 else y,chord_more_than_1,chord_1)
 
@@ -97,7 +97,10 @@ def final_determined(chord_combined):
 					note_mod = set([b%12 for b in buffer_notes])
 					if bcc is None:
 						if len(note_mod) == 1:
-							final_chord.append(Chord_class.key[min(buffer_notes)%12])
+							try:
+ 								final_chord.append(Chord_class.key[min(buffer_notes)%12])
+ 							except KeyError:
+								final_chord.append('None')                               
 						else:
 							try:
 								final_chord.append(Chord_class.key[min(buffer_notes)%12])

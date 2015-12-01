@@ -91,6 +91,7 @@ def adjust_tracks(staff,division,sigN):
 	ret_dic = {}
 	ticks_per_measure = int(sigN)*int(division)
 	ret_dic.update({'track0':filter(lambda g: type(g) != type(1),staff['track0'])})
+	now_beats = 0
 	for track in [t for t in staff if t != 'track0']:
 		adding = []
 		for info in staff[track]:

@@ -17,16 +17,13 @@ def paraHandler(commands):
 				d['user_removed'] = p.strip().split(',')
 	return d
 	
-def findChords(addr,main_melody=None):
+def findChords(music,main_melody=None):
 	if type(main_melody) == type(u''):
 		melodies = main_melody.encode('utf8').strip().split(',')
 	elif type(main_melody) == type(''):
 		melodies = main_melody.strip().split(',')
 	elif main_melody is not None:
 		melodies = [str(a) for a in list(main_melody)]
-	f = open(addr,'r')
-	music = bs(f.read(),'xml')
-	f.close()
 	staff1TimeSig = music.select_one('Score > Staff:nth-of-type(1) TimeSig')
 	division = int(music.find('Division').text)
 	sigN = Decimal(staff1TimeSig.find('sigN').text)

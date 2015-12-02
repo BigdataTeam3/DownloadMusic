@@ -1,6 +1,0 @@
-這是跑回歸的模型
-先下載test1.csv
-執行ananysis_main_melody
-產生data2.csv
-接下來用R開啟predict_logistic.R
-就會有結果

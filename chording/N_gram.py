@@ -47,7 +47,7 @@ def Dominantlist_4_gram_number(Dominantlist,N_gram_number,Compare_number):
 #     開始分類
 	Compare_list3 = Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number)
 	
-	Insert_to_mongodb(Compare_Dominant,N_gram_number)
+	Insert_dominant_to_mongodb(Compare_Dominant,N_gram_number)
 	
 
 #一次抓8個
@@ -67,7 +67,7 @@ def Dominantlist_8_gram_number(Dominantlist,N_gram_number,Compare_number):
 #     開始分類
 	Compare_list3 = Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number)
 	
-	Insert_to_mongodb(Compare_Dominant,N_gram_number)
+	Insert_dominant_to_mongodb(Compare_Dominant,N_gram_number)
 
 #一次抓16個
 
@@ -86,7 +86,7 @@ def Dominantlist_16_gram_number(Dominantlist,N_gram_number,Compare_number):
 #     開始分類
 	Compare_list3 = Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number)
 	
-	Insert_to_mongodb(Compare_Dominant,N_gram_number)
+	Insert_dominant_to_mongodb(Compare_Dominant,N_gram_number)
 	
 #一次抓32個
 
@@ -105,7 +105,7 @@ def Dominantlist_32_gram_number(Dominantlist,N_gram_number,Compare_number):
 #     開始分類
 	Compare_list3 = Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number)
 	
-	Insert_to_mongodb(Compare_Dominant,N_gram_number)
+	Insert_dominant_to_mongodb(Compare_Dominant,N_gram_number)
 	
 
 		
@@ -212,24 +212,58 @@ def Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number):
 
 
 # 塞進mongodb
-def	Insert_to_mongodb(Compare_Dominant,N_gram_number):
+def	Insert_dominant_to_mongodb(Compare_Dominant,N_gram_number):
 
 	client = MongoClient('mongodb://10.120.30.8:27017')
 	db = client['music']  #選擇database
+	collect = db['dominant_gram_pattern']  #選擇database.collection
 	
-	if N_gram_number == 4:
-		collect = db['4_gram_patern']  #選擇database.collection
-		for i in range(len(Compare_Dominant)):
-			collect.replace_one({'4_gram': Compare_Dominant[i][0]},{'4_gram': Compare_Dominant[i][0]},upsert=True)
-	elif N_gram_number == 8:
-		collect = db['8_gram_patern']  #選擇database.collection
-		for i in range(len(Compare_Dominant)):
-			collect.replace_one({'8_gram': Compare_Dominant[i][0]},{'8_gram': Compare_Dominant[i][0]},upsert=True)
-	elif N_gram_number == 16:
-		collect = db['16_gram_patern']  #選擇database.collection
-		for i in range(len(Compare_Dominant)):
-			collect.replace_one({'16_gram': Compare_Dominant[i][0]},{'16_gram': Compare_Dominant[i][0]},upsert=True)
-	elif N_gram_number == 32:
-		collect = db['32_gram_patern']  #選擇database.collection
-		for i in range(len(Compare_Dominant)):
-			collect.replace_one({'32_gram': Compare_Dominant[i][0]},{'32_gram': Compare_Dominant[i][0]},upsert=True)
+	for i in range(len(Compare_Dominant)):
+		if N_gram_number == 4:
+			collect.replace_one({'Dominant_4_gram': Compare_Dominant[i][0]},{'Dominant_4_gram': Compare_Dominant[i][0]},upsert=True)
+	
+		elif N_gram_number == 8:
+			collect.replace_one({'Dominant_8_gram': Compare_Dominant[i][0]},{'Dominant_8_gram': Compare_Dominant[i][0]},upsert=True)
+	
+		elif N_gram_number == 16:
+			collect.replace_one({'Dominant_16_gram': Compare_Dominant[i][0]},{'Dominant_16_gram': Compare_Dominant[i][0]},upsert=True)
+	
+		elif N_gram_number == 32:
+			collect.replace_one({'Dominant_32_gram': Compare_Dominant[i][0]},{'Dominant_32_gram': Compare_Dominant[i][0]},upsert=True)
+			
+#從mongodb取出
+def Get_dominant_from_mongodb(get_key):
+	client = MongoClient('mongodb://10.120.30.8:27017')
+	db = client['music']  #選擇database
+	collect = db['dominant_gram_pattern']  #選擇database.collection
+	
+	if get_key == 4:
+		cursor = collect.find({'Dominant_4_gram':{'$exists':True}})
+		Dominant_4_gram_list = list()
+		for doc in cursor:
+			Dominant_4_gram_list.append(doc['Dominant_4_gram'])
+		return Dominant_4_gram_list
+	
+	elif get_key == 8:
+		cursor = collect.find({'Dominant_8_gram':{'$exists':True}})
+		Dominant_8_gram_list = list()
+		for doc in cursor:
+			Dominant_8_gram_list.append(doc['Dominant_8_gram'])
+		return Dominant_8_gram_list
+	
+	elif get_key == 16:
+		cursor = collect.find({'Dominant_16_gram':{'$exists':True}})
+		Dominant_16_gram_list = list()
+		for doc in cursor:
+			Dominant_16_gram_list.append(doc['Dominant_16_gram'])
+		return Dominant_16_gram_list
+	
+	elif get_key == 32:
+		cursor = collect.find({'Dominant_32_gram':{'$exists':True}})
+		Dominant_32_gram_list = list()
+		for doc in cursor:
+			Dominant_32_gram_list.append(doc['Dominant_32_gram'])
+		return Dominant_32_gram_list
+		
+	else:
+		print "請重新選擇dominant_pattern，4 or 8 or 16 or 32".decode('cp950')

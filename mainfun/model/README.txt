@@ -1,0 +1,7 @@
+這是跑回歸的模型
+先下載test1.csv
+執行ananysis_main_melody
+產生data2.csv
+接下來用R開啟predict_logistic.R(或predict_randomForest.R)
+可選擇logistic regression、linear regression、randomForest跑模型
+就會跑其ROC curve等資訊

@@ -52,7 +52,7 @@ def get_perc_pattern(staff,division,sigN,sigD):
 				if tag.text == str(check_tick):
 					continue
 				else:
-					print 'error : ticking at the wrong time'
+					print 'error : ticking at the wrong time', 'skip measure '+ measure.get('number')
 					break
             
 			if tag.name == 'Chord' or tag.name == 'Rest':

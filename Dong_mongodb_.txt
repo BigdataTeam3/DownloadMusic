@@ -1,12 +1,10 @@
-ÀÉ®×¤wÂàpitch¡®keysigªºaccidental¬°0
-======================================================
-¥H¤U¬°dbname&&collectname 
+ä»¥ä¸‹ç‚ºdbname&&collectname 
 client = MongoClient('mongodb://10.120.30.8:27017')
 db = client['music']  
 collect = db['mscx_c_key']
 ======================================================
-Äæ¦ì¦WºÙ¡GÄæ¦ì¤º®e
-_id¡GÀÉ®×¦WºÙ
-data¡GÀÉ®×
-tonality¡Gmajor(¥D±Û«ß¦³¤j½Õ)§_«h¬Ominor
-main_melody¡G¥D±Û«ßªºstaff_id
+æ¬„ä½åç¨±ï¼šæ¬„ä½å…§å®¹
+_idï¼šæª”æ¡ˆåç¨±
+dataï¼šæª”æ¡ˆ
+tonalityï¼šmajor(ä¸»æ—‹å¾‹æœ‰å¤§èª¿)å¦å‰‡æ˜¯minor
+main_melodyï¼šä¸»æ—‹å¾‹çš„staff_id

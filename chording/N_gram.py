@@ -1,7 +1,8 @@
 # coding=utf-8
 from operator import itemgetter
-import csv,sys
+import csv,sys,pymongo
 from math import log
+from pymongo import MongoClient
 
 def N_gram_main_function_single(Dominantlist):
 	N_gram_number = raw_input("請輸入N-gram-number，4 or 8 or 16 or 32".decode('cp950'))
@@ -45,7 +46,8 @@ def Dominantlist_4_gram_number(Dominantlist,N_gram_number,Compare_number):
 	Compare_Dominant,Compare_number = Dominantclean_to_Dominantcompare(Compare_list,Dominantsorted_4freq,Compare_number)
 #     開始分類
 	Compare_list3 = Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number)
-
+	
+	Insert_to_mongodb(Compare_Dominant,N_gram_number)
 	
 
 #一次抓8個
@@ -64,7 +66,8 @@ def Dominantlist_8_gram_number(Dominantlist,N_gram_number,Compare_number):
 	Compare_Dominant,Compare_number = Dominantclean_to_Dominantcompare(Compare_list,Dominantsorted_8freq,Compare_number)
 #     開始分類
 	Compare_list3 = Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number)
-
+	
+	Insert_to_mongodb(Compare_Dominant,N_gram_number)
 
 #一次抓16個
 
@@ -83,6 +86,7 @@ def Dominantlist_16_gram_number(Dominantlist,N_gram_number,Compare_number):
 #     開始分類
 	Compare_list3 = Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number)
 	
+	Insert_to_mongodb(Compare_Dominant,N_gram_number)
 	
 #一次抓32個
 
@@ -101,9 +105,14 @@ def Dominantlist_32_gram_number(Dominantlist,N_gram_number,Compare_number):
 #     開始分類
 	Compare_list3 = Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number)
 	
+	Insert_to_mongodb(Compare_Dominant,N_gram_number)
+	
+
+		
 #===============================================================
 #以下是共用def
 
+# 產生N-gram
 def Dominantlist_to_Dominantgram(Dominantlist,N_gram_number):
 	return [Dominantlist[i:i+N_gram_number] for i in range(len(Dominantlist)-(N_gram_number-1)) if (i%2)==0]
 
@@ -138,17 +147,16 @@ def Dominantclean_to_Dominantcompare(Compare_list,Dominantsorted,Compare_number)
 	Compare_Dominant = [Dominantsorted[i] for i in range(len(Dominantsorted)) for j in Compare_list if Dominantsorted[i][0] == j]
 	print "可用來比對的和弦組合".decode('cp950')
 	print Compare_Dominant
-	print "總共有幾個和弦組合可用來比對 =".decode('cp950'),len(Compare_list)
+	print "總共有幾個和弦組合可用來比對 =".decode('cp950'),len(Compare_Dominant)
 	Compare_length_list = []
-	Compare_length_list = [i for i in range(len(Compare_list))]
+	Compare_length_list = [i for i in range(len(Compare_Dominant))]
 	Compare_string = "請重新輸入比對的number，範圍從{}到{}".decode('cp950').format(0,Compare_length_list[-1])
 	if Compare_number in Compare_length_list:
 		return (Compare_Dominant,Compare_number)
 	else :
 		print Compare_string
 		sys.exit(0)
-		
-	# Compare_number = Compare_number_func(len(Compare_list))
+	# Compare_number = Compare_number_func(len(Compare_Dominant))
 	
 	
 #選擇第幾個和弦組合，可搭配N_gram_main_function_single使用
@@ -166,6 +174,7 @@ def Dominantclean_to_Dominantcompare(Compare_list,Dominantsorted,Compare_number)
     # else :
         # return Compare_number_func(Compare_length)
 
+		
 def Dominantsorted_count_comparator(x):
     return x[1]
 
@@ -178,6 +187,7 @@ def Dominantsorted_count_sum(x,y):
 #目前一次四個和弦，最多錯一個和弦，然後去掉重複的，做成list，用來分類
 #目前一次八個和弦，最多錯兩個和弦，然後去掉重複的，做成list，用來分類
 #目前一次十六個和弦，最多錯三個和弦，然後去掉重複的，做成list，用來分類
+#目前一次三十二個和弦，最多錯四個和弦，然後去掉重複的，做成list，用來分類
 def Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number):
 	Compare_list2 = []
 	print "用來比對的和弦".decode('cp950')
@@ -198,4 +208,28 @@ def Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number):
 	Compare_list3 = max(Compare_list2,key = Dominantsorted_count_comparator)
 	Compare_list4 = reduce(Dominantsorted_count_sum,Compare_list2,[Compare_list3[0],0])
 	print Compare_list4
-#     return Compare_list2,Compare_list3
+#     return Compare_list2,Compare_list3,Compare_list4
+
+
+# 塞進mongodb
+def	Insert_to_mongodb(Compare_Dominant,N_gram_number):
+
+	client = MongoClient('mongodb://10.120.30.8:27017')
+	db = client['music']  #選擇database
+	
+	if N_gram_number == 4:
+		collect = db['4_gram_patern']  #選擇database.collection
+		for i in range(len(Compare_Dominant)):
+			collect.replace_one({'4_gram': Compare_Dominant[i][0]},{'4_gram': Compare_Dominant[i][0]},upsert=True)
+	elif N_gram_number == 8:
+		collect = db['8_gram_patern']  #選擇database.collection
+		for i in range(len(Compare_Dominant)):
+			collect.replace_one({'8_gram': Compare_Dominant[i][0]},{'8_gram': Compare_Dominant[i][0]},upsert=True)
+	elif N_gram_number == 16:
+		collect = db['16_gram_patern']  #選擇database.collection
+		for i in range(len(Compare_Dominant)):
+			collect.replace_one({'16_gram': Compare_Dominant[i][0]},{'16_gram': Compare_Dominant[i][0]},upsert=True)
+	elif N_gram_number == 32:
+		collect = db['32_gram_patern']  #選擇database.collection
+		for i in range(len(Compare_Dominant)):
+			collect.replace_one({'32_gram': Compare_Dominant[i][0]},{'32_gram': Compare_Dominant[i][0]},upsert=True)

@@ -5,8 +5,12 @@ from operator import itemgetter
 import collections,pymongo
 from pymongo import MongoClient
 
-# Âà´«drumªº¨C¤@­Ó Measure¡AÂà¦¨¼ĞÅÒ by Henry
-# ²Ä¤@­Ó°Ñ¼Æ¬Odicts¡A²Ä¤G­Ó¸ò²Ä¤T­Ó°Ñ¼Æ¬OÂà´«¼ĞÅÒªº¤ñ²v¡A¨Ò0.1 or 0.2
+# è½‰æ›drumçš„æ¯ä¸€å€‹ Measureï¼Œè½‰æˆæ¨™ç±¤ by Henry
+# ç¬¬ä¸€å€‹åƒæ•¸æ˜¯dictsï¼Œç¬¬äºŒå€‹è·Ÿç¬¬ä¸‰å€‹åƒæ•¸æ˜¯è½‰æ›æ¨™ç±¤çš„æ¯”ç‡ï¼Œä¾‹0.1 or 0.2
+# æ‰¾å‡ºæ‰“æ“Šæ¨‚(é¼“)å¸¸è¦‹çš„å½¢å¼
+# measure(å°ç¯€)
+# track(è²éƒ¨) track0:æ‰“Aæ¨‚å™¨;track1:æ‰“Bæ¨‚å™¨;track2:æ‰“Cæ¨‚å™¨;å‡ºç¾åœ¨åŒä¸€å°ç¯€æ™‚,å„è‡ªæ‰“æ“Šè‡ªå·±çš„ç¯€å¥
+# ä»¥ä¸‹dicæ˜¯å­—å…¸ï¼Œæ²’æœ‰æ’åº
 def Association_analysis_mainfunction(dicts,percent_value_ceiling=0.21,percent_value_floor=0.08):
 	Measure_lists = Measure_extract_from_dictdata(dicts)
 # print Measure_lists
@@ -23,7 +27,7 @@ def Association_analysis_mainfunction(dicts,percent_value_ceiling=0.21,percent_v
 	Insert_percussion_to_mongodb(Transfer_percussion_dict,percent_value_ceiling,percent_value_floor)
 	
 
-#¨C­Ó¤p¸`©Ò¦³track¦X¨Ö
+#æ¯å€‹å°ç¯€æ‰€æœ‰trackåˆä½µ
 # def Measure_extract_from_dictdata(dicts):
     # values_lists = [i.values() for i in dicts.values()]
     # values_lists = [[','.join(values_lists[i])] for i in range(len(values_lists))]
@@ -32,21 +36,21 @@ def Association_analysis_mainfunction(dicts,percent_value_ceiling=0.21,percent_v
     # return values_lists
 
 	
-# ¥ı±Ndicts of dicts ªºvalue¨ú¥X¨Ó¡A¥H¤@­ÓMeasure¬°³æ¦ì¡A«Ø¥ßlists¡A
-# ¦pªG¦³¦h­Ótrack¦b¦P¤@­ÓMeasure¡A¦X¨Ö¨ì¦P¤@­Ólists¸Ì­±	
+# å…ˆå°‡dicts of dicts çš„valueå–å‡ºä¾†ï¼Œä»¥ä¸€å€‹Measureç‚ºå–®ä½ï¼Œå»ºç«‹listsï¼Œ
+# å¦‚æœæœ‰å¤šå€‹trackåœ¨åŒä¸€å€‹Measureï¼Œåˆä½µåˆ°åŒä¸€å€‹listsè£¡é¢	
 def Measure_extract_from_dictdata(dicts):
 	values_lists = [i.values() for i in dicts.values()]
 	values_lists = [[i[j]] for i in values_lists for j in range(len(i))]	
 	return values_lists
 
-#·f°t¦X¨Ötrackªºlist
+#æ­é…åˆä½µtrackçš„list
 # def Transfer_type_int_or_float(Measure_element):
     # if '.' not in Measure_element:
         # return int(Measure_element)
     # else:
         # return float(Measure_element)
 
-# ²Ö­p¨C­ÓMeasure lists¥X²{ªº¦¸¼Æ¡A¨Ã«Ø¥ß ±Æ§Çdicts¡A{key = measure_lists , value = ¦¸¼Æ}¡A¨Ã¥B¨Ì¦¸¼Æ±Æ§Ç
+# ç´¯è¨ˆæ¯å€‹Measure listså‡ºç¾çš„æ¬¡æ•¸ï¼Œä¸¦å»ºç«‹ æ’åºdictsï¼Œ{key = measure_lists , value = æ¬¡æ•¸}ï¼Œä¸¦ä¸”ä¾æ¬¡æ•¸æ’åº
 def Establish_percussion_dict_sorted(values_lists):
     Percussion_dict = dict()
     for measure in values_lists:
@@ -60,7 +64,7 @@ def Count_total(x, y):
 def Transfer_percent(x, y):
     return round(float(x)/float(y),3)
 
-# ±q ±Æ§Çdicts¡A¦A«Ø¥ß¤@­Ó  ¦Ê¤À¤ñÂà´«dicts¡A{key = ¦¸¼Æ¡Avalue = ¦Ê¤À¤ñ}
+# å¾ æ’åºdictsï¼Œå†å»ºç«‹ä¸€å€‹  ç™¾åˆ†æ¯”è½‰æ›dictsï¼Œ{key = æ¬¡æ•¸ï¼Œvalue = ç™¾åˆ†æ¯”}
 def Establish_percent_dict(Percussion_dict):
     count_list = [i[1] for i in Percussion_dict]
     count_totals = 0 
@@ -68,7 +72,7 @@ def Establish_percent_dict(Percussion_dict):
     percent_dict = {i:Transfer_percent(i,count_totals) for i in count_list}
     return percent_dict
    
-# ±N ±Æ§Çdictsªº¦¸¼Æ¡A®M¥Î  ¦Ê¤À¤ñÂà´«dicts
+# å°‡ æ’åºdictsçš„æ¬¡æ•¸ï¼Œå¥—ç”¨  ç™¾åˆ†æ¯”è½‰æ›dicts
 def Transfer_percussion_dict_percent(Percussion_dict,percent_dict):
     Transfer_percussion_dict = dict()
     for (key,value) in Percussion_dict:
@@ -76,8 +80,8 @@ def Transfer_percussion_dict_percent(Percussion_dict,percent_dict):
     Transfer_percussion_dict = sorted(Transfer_percussion_dict.items(), key=itemgetter(1), reverse=True)
     return Transfer_percussion_dict
 
-# ¹ïÂà´«§¹ªº ±Æ§Çdicts¡A®Ú¾Ú¦Ê¤À¤ñ¡A¦A«Ø¥ß ¼ĞÅÒdicts¡A
-#{Measure lists¡AÂà¦¨¼ĞÅÒ¡A¤j©ópercent_value¡A¬°A1,A2...¡A¤p©ópercent_value¡A¬°B1,B2...}
+# å°è½‰æ›å®Œçš„ æ’åºdictsï¼Œæ ¹æ“šç™¾åˆ†æ¯”ï¼Œå†å»ºç«‹ æ¨™ç±¤dictsï¼Œ
+#{Measure listsï¼Œè½‰æˆæ¨™ç±¤ï¼Œå¤§æ–¼percent_valueï¼Œç‚ºA1,A2...ï¼Œå°æ–¼percent_valueï¼Œç‚ºB1,B2...}
 def Establish_measure_dict(Transfer_percussion_dict,percent_value_ceiling,percent_value_floor):
 	measure_dict = dict()
 	count_A = 0
@@ -99,8 +103,8 @@ def Establish_measure_dict(Transfer_percussion_dict,percent_value_ceiling,percen
 			measure_dict.update({[key][0] : 'C'+str(count_C)})
 	return measure_dict,order_value
 
-# ®M¥Î¼ĞÅÒdicts
-# Âà´«­ì¥ıªºdicts¡A¥ş³¡Measure Âà¦¨¼ĞÅÒ
+# å¥—ç”¨æ¨™ç±¤dicts
+# è½‰æ›åŸå…ˆçš„dictsï¼Œå…¨éƒ¨Measure è½‰æˆæ¨™ç±¤
 def Transfer_dictdata(dicts,measure_dict):
     for keys,values in dicts.items():
         for key,value in values.items():
@@ -110,12 +114,12 @@ def Transfer_dictdata(dicts,measure_dict):
 
 
 
-# ¶ë¶imongodb
+# å¡é€²mongodb
 def	Insert_percussion_to_mongodb(Transfer_percussion_dict,percent_value_ceiling,percent_value_floor):
 
 	client = MongoClient('mongodb://10.120.30.8:27017')
-	db = client['music']  #¿ï¾Üdatabase
-	collect = db['percussion_pattern']  #¿ï¾Üdatabase.collection
+	db = client['music']  #é¸æ“‡database
+	collect = db['percussion_pattern']  #é¸æ“‡database.collection
 	
 	for i in Transfer_percussion_dict:
 		if i[1] >= percent_value_ceiling:
@@ -127,11 +131,11 @@ def	Insert_percussion_to_mongodb(Transfer_percussion_dict,percent_value_ceiling,
 		else :
 			collect.replace_one({'C_pattern': i[0]},{'C_pattern': i[0]},upsert=True)
 
-#±qmongodb¨ú¥X
+#å¾mongodbå–å‡º
 def Get_percussion_from_mongodb(get_key):
 	client = MongoClient('mongodb://10.120.30.8:27017')
-	db = client['music']  #¿ï¾Üdatabase
-	collect = db['percussion_pattern']  #¿ï¾Üdatabase.collection
+	db = client['music']  #é¸æ“‡database
+	collect = db['percussion_pattern']  #é¸æ“‡database.collection
 	
 	if (str(get_key) == 'A') or (str(get_key) == 'a'):
 		cursor = collect.find({'A_pattern':{'$exists':True}})
@@ -155,4 +159,4 @@ def Get_percussion_from_mongodb(get_key):
 		return C_pattern_list
 	
 	else:
-		print "½Ğ­«·s¿ï¾Üpercussion_pattern¡AA or B or C".decode('cp950')
+		print "è«‹é‡æ–°é¸æ“‡percussion_patternï¼ŒA or B or C".decode('cp950')

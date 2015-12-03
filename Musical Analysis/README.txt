@@ -1,3 +1,5 @@
-hierarchical clustering.ipynb:Ãö©ó©w¸q©ç¤lªº¶ZÂ÷¨ç¼Æ
+hierarchical clustering.ipynb:é—œæ–¼å®šç¾©æ‹å­çš„è·é›¢å‡½æ•¸
 
-musical instruments identify program ver.henry.ipynb:¨ú¹ê»Ú¼u«µ¼Ö¾¹¦W
+musical instruments identify program ver.henry.ipynb:å–å¯¦éš›å½ˆå¥æ¨‚å™¨å
+
+Tempo+pitch by_henry.ipynbï¼šå–å‡ºTempoè·ŸéŸ³é«˜

@@ -119,10 +119,10 @@ def Tchord(tkno,x):
             Tdot = Ctag.new_tag("dots")
             Tdot.string = str(x[2])
             Ctag.Chord.append(Tdot)
-            durT = Ctag.new_tag("durationType")
-            durT.string = x[1]
-            Ctag.Chord.append(durT)
-            ccc.append(Ctag)
+        durT = Ctag.new_tag("durationType")
+        durT.string = x[1]
+        Ctag.Chord.append(durT)
+        ccc.append(Ctag)
         for i in range(0,len(x[0])):
             Tnote = Ctag.Chord.append(Ctag.new_tag("Note"))
             if tkno > 0 :

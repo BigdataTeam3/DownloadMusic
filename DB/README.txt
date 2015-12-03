@@ -8,3 +8,4 @@ DATABASE=MUSICTABLE、tablename=musicname
 transform_mid_to_mscx.py:轉midi成mscx檔
 
 Dong_mongodb_.txt:說明執行完dir_mainfun後塞入的mongodb資訊
+===============================================================

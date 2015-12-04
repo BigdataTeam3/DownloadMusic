@@ -4,6 +4,7 @@ import numpy as np
 from operator import itemgetter
 import collections,pymongo
 from pymongo import MongoClient
+import re
 
 # 轉換drum的每一個 Measure，轉成標籤 by Henry
 # 第一個參數是dicts，第二個跟第三個參數是轉換標籤的比率，例0.1 or 0.2

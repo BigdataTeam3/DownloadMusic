@@ -147,9 +147,9 @@ def Dominantsorted_possible_transfer_clean(Dominantsorted):
 #找出和弦組合
 def Dominantclean_to_Dominantcompare(Compare_list,Dominantsorted,Compare_number):
 	Compare_Dominant = [Dominantsorted[i] for i in range(len(Dominantsorted)) for j in Compare_list if Dominantsorted[i][0] == j]
-	print "可用來比對的和弦組合".decode('cp950')
-	print Compare_Dominant
-	print "總共有幾個和弦組合可用來比對 =".decode('cp950'),len(Compare_Dominant)
+	# print "可用來比對的和弦組合".decode('cp950')
+	# print Compare_Dominant
+	# print "總共有幾個和弦組合可用來比對 =".decode('cp950'),len(Compare_Dominant)
 	Compare_length_list = []
 	Compare_length_list = [i for i in range(len(Compare_Dominant))]
 	Compare_string = "請重新輸入比對的number，範圍從{}到{}".decode('cp950').format(0,Compare_length_list[-1])
@@ -192,9 +192,9 @@ def Dominantsorted_count_sum(x,y):
 #目前一次三十二個和弦，最多錯四個和弦，然後去掉重複的，做成list，用來分類
 def Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number):
 	Compare_list2 = []
-	print "用來比對的和弦".decode('cp950')
-	print Compare_Dominant[Compare_number][0]
-	print "和弦組合當中，類似的組合".decode('cp950')
+	# print "用來比對的和弦".decode('cp950')
+	# print Compare_Dominant[Compare_number][0]
+	# print "和弦組合當中，類似的組合".decode('cp950')
 	
 	missnumber = int(log(N_gram_number,2))-1
 
@@ -202,14 +202,14 @@ def Compare_Dominant_classify(Compare_Dominant,Compare_number,N_gram_number):
 		Compare_count = 0
 		for j in range(len(Compare_Dominant[0][0])):
 			if cmp(Compare_Dominant[Compare_number][0][j],Compare_Dominant[i][0][j]) == 0 : Compare_count += 1       
-		print Compare_count,Compare_Dominant[i][0]
+		# print Compare_count,Compare_Dominant[i][0]
 		if Compare_count >= (len(Compare_Dominant[0][0])-missnumber) : Compare_list2.append(Compare_Dominant[i])
-	print "挑選的結果".decode('cp950')
-	print Compare_list2
-	print "歸類到最多次數的和弦".decode('cp950')
+	# print "挑選的結果".decode('cp950')
+	# print Compare_list2
+	# print "歸類到最多次數的和弦".decode('cp950')
 	Compare_list3 = max(Compare_list2,key = Dominantsorted_count_comparator)
 	Compare_list4 = reduce(Dominantsorted_count_sum,Compare_list2,[Compare_list3[0],0])
-	print Compare_list4
+	# print Compare_list4
 #     return Compare_list2,Compare_list3,Compare_list4
 
 
@@ -220,7 +220,8 @@ def	Insert_dominant_to_mongodb(Compare_Dominant,N_gram_number):
 	db = client['music']  #選擇database
 	collect = db['dominant_gram_pattern']  #選擇database.collection
 	
-	for i in range(len(Compare_Dominant)):
+	# for i in range(len(Compare_Dominant)):
+	for i in range(3):
 		if N_gram_number == 4:
 			collect.replace_one({'Dominant_4_gram': Compare_Dominant[i][0]},{'Dominant_4_gram': Compare_Dominant[i][0]},upsert=True)
 	

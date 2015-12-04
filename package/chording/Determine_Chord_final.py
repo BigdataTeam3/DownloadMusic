@@ -28,8 +28,8 @@ class Chord_class:
 				if set(no)-set(convert(c)) == set():
 					return Chord_class.chord[c]
 			return None
-	chord7 = {(0,4,7,11):'Cmaj7',(0,2,5,9):'Dm7',(2,4,7,11):'Em7',(0,4,5,9):'Fmaj7',(2,5,7,11):'G7',(0,4,7,9):'Am7'}
-	chord = {convert((0,4,7)):'C',convert((2,5,9)):'Dm',convert((4,7,11)):'Em',convert((0,5,9)):'F',convert((2,7,11)):'G',convert((0,4,9)):'Am',convert((2,5,10)):'Bb',convert((2,5,11)):'Bdim'}
+	chord7 = {(0,4,7,11):'Cmaj7',(0,2,5,9):'Dm7',(2,4,7,11):'Em7',(0,4,5,9):'Fmaj7',(2,5,7,11):'G7',(0,4,7,9):'Am7',(0,4,7,10):'C7',(2,6,9,12):'D7',(4,8,11,2):'E7'}
+	chord = {convert((0,4,7)):'C',convert((2,5,9)):'Dm',convert((4,7,11)):'Em',convert((0,5,9)):'F',convert((2,7,11)):'G',convert((0,4,9)):'Am',convert((2,5,10)):'Bb',convert((2,5,11)):'Bdim',convert((2,6,9)):'D',convert((4,8,11)):'E',convert((1,4,9)):'A'}
 	chord_np = np.array(chord.keys())
 	key = {0:'C',2:'Dm',4:'Em',5:'F',7:'G',9:'Am',11:'Bdim'}
 

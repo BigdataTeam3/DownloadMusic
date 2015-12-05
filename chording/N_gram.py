@@ -316,7 +316,7 @@ def Get_dominant_from_mongodb(get_key):
 		print "請重新選擇dominant_pattern，4 or 8 or 16 or 32".decode('cp950')
 
 		
-#更新mongo by group
+#更新 dominant mongo by group
 
 # from bson.son import SON
 # from bson.code import Code
@@ -325,21 +325,24 @@ def Get_dominant_from_mongodb(get_key):
 # client = MongoClient('mongodb://10.120.30.8:27017')
 # db = client['music']  #選擇database
 # collect = db['dominant_gram_pattern_with_no_replace']  #選擇database.collection
-# # collect = db['dominant_gram_pattern_with_no_replace_test']  #選擇database.collection
 
 
 # pipeline = [
-     # {"$group": {"_id": '$Dominant_32_gram', "Dominant_count": {"$sum": 1}}},
-# #     {"$sort": SON([("Dominant_count", -1), ("_id", 1)])}
+     # {"$group": {"_id": '$Dominant_32_gram', 
+                 # "Dominant_count": {"$sum": 1}}},
+    # {"$sort": SON([("Dominant_count", -1), ("_id", 1)])}
     
 # ]
-# # list(collect.aggregate(pipeline))
-# Dominant_count_from_mongo = collect.aggregate(pipeline)
+# Dominant_count_from_mongo = list(collect.aggregate(pipeline))
 
 # for Dominant in Dominant_count_from_mongo:
-# #     print Dominant['_id'],Dominant["Dominant_count"]
-# #     id = Dominant['_id']
-    # collect.update_many(
-        # {"Dominant_32_gram":Dominant['_id']},
-        # {"$set":{"Dominant_count": Dominant["Dominant_count"]}}
-    # )
+    # if Dominant['_id'] != None:
+# #         print Dominant['_id'],Dominant['Dominant_count']
+        # collect.update_one({"Dominant_32_gram":Dominant['_id']},{'$set':{"Dominant_count": Dominant["Dominant_count"]}})
+
+# # cursor = collect.find({'Dominant_32_gram':{'$exists':True},'Dominant_count':{'$exists':True}})
+# cursor = collect.find({'Dominant_32_gram':{'$exists':True},'Dominant_count':{'$exists':False}})
+
+# for doc in cursor:
+# #     print doc
+    # collect.delete_one(doc)

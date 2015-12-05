@@ -111,7 +111,7 @@ def Establish_measure_dict(Transfer_percussion_dict,percent_value_ceiling,percen
 # 套用標籤dicts
 # 轉換原先的dicts，全部Measure 轉成標籤
 def Transfer_dictdata(dicts,measure_dict):
-	Measure_dict_reverse = dict()
+    Measure_dict_reverse = dict()
     for keys,values in dicts.items():
         for key,value in values.items():
             value = ','.join(values.values())
@@ -194,58 +194,102 @@ def Get_percussion_from_mongodb(get_key):
 
 
 		
-#percussion使用，檢查用，更新用
-# from pymongo import MongoClient
-# import pymongo
-# client = MongoClient('mongodb://10.120.30.8:27017')
-# db = client['music']  #選擇database
+#percussion使用，更新用
+def percussion_group_in_mongo(group_key):
+	from pymongo import MongoClient
+	import pymongo
+	client = MongoClient('mongodb://10.120.30.8:27017')
+	db = client['music']  #選擇database
 # collect = db['percussion_pattern']  #選擇database.collection
 # collect = db['percussion_pattern_with_track']  #選擇database.collection
-# collect = db['percussion_pattern_with_track_A_pattern']  #選擇database.collection
-# collect = db['percussion_pattern_with_track_B_pattern']  #選擇database.collection
-# collect = db['percussion_pattern_with_track_C_pattern']  #選擇database.collection
-
-# cursor = collect.find({'_id':{'$exists':True}})
-
-# cursor = collect.find({})
 
 
-# collect.insert({'_id': "userid", 'seq': 0})  
-# def getNextSequence(collection,name):  
-#     return collection.find_and_modify(query= { '_id': name },update= { '$inc': {'seq': 1}}, new=True ).get('seq');  
-# collect.insert({'_uid': getNextSequence(db.orgid_counter,"userid"), 'name': "Sara a"})  
+	if (str(get_key) == 'A') or (str(get_key) == 'a'):
+		collect = db['percussion_pattern_with_track_A_pattern']  #選擇database.collection
+		pipeline = [
+					{"$group": {"_id": '$A_pattern', 
+					"pattern_count": {"$sum": 1}}},
+					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
+					]
+		pattern_count_from_mongo = list(collect.aggregate(pipeline))
 
-# pipeline = [
-#      {"$group": {"_id": '$C_pattern', 
-#                  "pattern_count": {"$sum": 1}}},
-#     {"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-    
-# ]
-# pattern_count_from_mongo = list(collect.aggregate(pipeline))
+		for pattern in pattern_count_from_mongo:
+			# print pattern['_id'],pattern['pattern_count']
+			collect.update_one({"A_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
+			
+		# cursor = collect.find({'A_pattern':{'$exists':True},'pattern_count':{'$exists':True}})
+		cursor = collect.find({'A_pattern':{'$exists':True},'pattern_count':{'$exists':False}})
+		for doc in cursor:
+		    collect.delete_one(doc)
 
-# for pattern in pattern_count_from_mongo:
-# #     print pattern['_id'],pattern['pattern_count']
-#     collect.update_one({"C_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
+		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
+			# print i+1,doc['_id'],doc['A_pattern'],doc['pattern_count']
+			if (i+1) != doc['_id']:
+				newdoc = {"_id":i+1,"A_pattern":doc['A_pattern']}
+				# print i,doc['_id'],doc['A_pattern']
+				# print newdoc
+				collect.insert_one(newdoc)
+				collect.delete_one({'_id':doc['_id']})
 
+		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
+			collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
+			
+	elif (str(get_key) == 'B') or (str(get_key) == 'b'):
+		collect = db['percussion_pattern_with_track_B_pattern']  #選擇database.collection
+		pipeline = [
+					{"$group": {"_id": '$B_pattern', 
+					"pattern_count": {"$sum": 1}}},
+					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
+					]
+		pattern_count_from_mongo = list(collect.aggregate(pipeline))
 
-# cursor = collect.find({'C_pattern':{'$exists':True},'pattern_count':{'$exists':True}})
-# cursor = collect.find({'C_pattern':{'$exists':True},'pattern_count':{'$exists':False}})
+		for pattern in pattern_count_from_mongo:
+			# print pattern['_id'],pattern['pattern_count']
+			collect.update_one({"B_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
+			
+		# cursor = collect.find({'B_pattern':{'$exists':True},'pattern_count':{'$exists':True}})
+		cursor = collect.find({'B_pattern':{'$exists':True},'pattern_count':{'$exists':False}})
+		for doc in cursor:
+		    collect.delete_one(doc)
 
-# for doc in cursor:
-#     print doc
-#     collect.delete_one(doc)
-    
-# cursor.count()
+		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
+			# print i+1,doc['_id'],doc['B_pattern'],doc['pattern_count']
+			if (i+1) != doc['_id']:
+				newdoc = {"_id":i+1,"B_pattern":doc['B_pattern']}
+				# print i,doc['_id'],doc['B_pattern']
+				# print newdoc
+				collect.insert_one(newdoc)
+				collect.delete_one({'_id':doc['_id']})
 
+		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
+			collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
+			
+	elif (str(get_key) == 'C') or (str(get_key) == 'c'):
+		collect = db['percussion_pattern_with_track_C_pattern']  #選擇database.collection
+		pipeline = [
+					{"$group": {"_id": '$C_pattern', 
+					"pattern_count": {"$sum": 1}}},
+					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
+					]
+		pattern_count_from_mongo = list(collect.aggregate(pipeline))
 
-# for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
-    # print i+1,doc['_id'],doc['A_pattern']
-#     print doc['pattern_count']
-#     collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
+		for pattern in pattern_count_from_mongo:
+			# print pattern['_id'],pattern['pattern_count']
+			collect.update_one({"C_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
+			
+		# cursor = collect.find({'C_pattern':{'$exists':True},'pattern_count':{'$exists':True}})
+		cursor = collect.find({'C_pattern':{'$exists':True},'pattern_count':{'$exists':False}})
+		for doc in cursor:
+		    collect.delete_one(doc)
 
-#     if (i+1) != doc['_id']:
-# #         print i,doc['_id'],doc['C_pattern']
-#         newdoc = {"_id":i+1,"C_pattern":doc['C_pattern']}
-# #         print newdoc
-#         collect.insert_one(newdoc)
-#         collect.delete_one({'_id':doc['_id']})
+		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
+			# print i+1,doc['_id'],doc['C_pattern'],doc['pattern_count']
+			if (i+1) != doc['_id']:
+				newdoc = {"_id":i+1,"C_pattern":doc['C_pattern']}
+				# print i,doc['_id'],doc['C_pattern']
+				# print newdoc
+				collect.insert_one(newdoc)
+				collect.delete_one({'_id':doc['_id']})
+
+		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
+			collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})

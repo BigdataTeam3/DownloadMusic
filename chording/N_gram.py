@@ -219,21 +219,63 @@ def	Insert_dominant_to_mongodb(Compare_Dominant,N_gram_number):
 	client = MongoClient('mongodb://10.120.30.8:27017')
 	db = client['music']  #選擇database
 	collect = db['dominant_gram_pattern']  #選擇database.collection
+	# collect = db['dominant_gram_pattern_with_no_replace']  #選擇database.collection
 	
-	# for i in range(len(Compare_Dominant)):
-	for i in range(3):
-		if N_gram_number == 4:
-			collect.replace_one({'Dominant_4_gram': Compare_Dominant[i][0]},{'Dominant_4_gram': Compare_Dominant[i][0]},upsert=True)
+	if len(Compare_Dominant) > 3:
+		for i in range(3):
+			if N_gram_number == 4:
+				collect.replace_one({'Dominant_4_gram': Compare_Dominant[i][0]},{'Dominant_4_gram': Compare_Dominant[i][0]},upsert=True)
+		
+			elif N_gram_number == 8:
+				collect.replace_one({'Dominant_8_gram': Compare_Dominant[i][0]},{'Dominant_8_gram': Compare_Dominant[i][0]},upsert=True)
+		
+			elif N_gram_number == 16:
+				collect.replace_one({'Dominant_16_gram': Compare_Dominant[i][0]},{'Dominant_16_gram': Compare_Dominant[i][0]},upsert=True)
+		
+			elif N_gram_number == 32:
+				collect.replace_one({'Dominant_32_gram': Compare_Dominant[i][0]},{'Dominant_32_gram': Compare_Dominant[i][0]},upsert=True)
+	else:
+		for i in range(len(Compare_Dominant)):
+			if N_gram_number == 4:
+				collect.replace_one({'Dominant_4_gram': Compare_Dominant[i][0]},{'Dominant_4_gram': Compare_Dominant[i][0]},upsert=True)
+		
+			elif N_gram_number == 8:
+				collect.replace_one({'Dominant_8_gram': Compare_Dominant[i][0]},{'Dominant_8_gram': Compare_Dominant[i][0]},upsert=True)
+		
+			elif N_gram_number == 16:
+				collect.replace_one({'Dominant_16_gram': Compare_Dominant[i][0]},{'Dominant_16_gram': Compare_Dominant[i][0]},upsert=True)
+		
+			elif N_gram_number == 32:
+				collect.replace_one({'Dominant_32_gram': Compare_Dominant[i][0]},{'Dominant_32_gram': Compare_Dominant[i][0]},upsert=True)
 	
-		elif N_gram_number == 8:
-			collect.replace_one({'Dominant_8_gram': Compare_Dominant[i][0]},{'Dominant_8_gram': Compare_Dominant[i][0]},upsert=True)
-	
-		elif N_gram_number == 16:
-			collect.replace_one({'Dominant_16_gram': Compare_Dominant[i][0]},{'Dominant_16_gram': Compare_Dominant[i][0]},upsert=True)
-	
-		elif N_gram_number == 32:
-			collect.replace_one({'Dominant_32_gram': Compare_Dominant[i][0]},{'Dominant_32_gram': Compare_Dominant[i][0]},upsert=True)
-			
+	#搭配 collect = db['dominant_gram_pattern_with_no_replace'] 使用
+	# if len(Compare_Dominant) > 3:
+		# for i in range(3):
+			# if N_gram_number == 4:
+				# collect.insert_one({'Dominant_4_gram': Compare_Dominant[i][0]})
+		
+			# elif N_gram_number == 8:
+				# collect.insert_one({'Dominant_8_gram': Compare_Dominant[i][0]})
+		
+			# elif N_gram_number == 16:
+				# collect.insert_one({'Dominant_16_gram': Compare_Dominant[i][0]})
+		
+			# elif N_gram_number == 32:
+				# collect.insert_one({'Dominant_32_gram': Compare_Dominant[i][0]})
+	# else:
+		# for i in range(len(Compare_Dominant)):
+			# if N_gram_number == 4:
+				# collect.insert_one({'Dominant_4_gram': Compare_Dominant[i][0]})
+		
+			# elif N_gram_number == 8:
+				# collect.insert_one({'Dominant_8_gram': Compare_Dominant[i][0]})
+		
+			# elif N_gram_number == 16:
+				# collect.insert_one({'Dominant_16_gram': Compare_Dominant[i][0]})
+		
+			# elif N_gram_number == 32:
+				# collect.insert_one({'Dominant_32_gram': Compare_Dominant[i][0]})
+				
 #從mongodb取出
 def Get_dominant_from_mongodb(get_key):
 	client = MongoClient('mongodb://10.120.30.8:27017')

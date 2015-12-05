@@ -219,7 +219,6 @@ def	Insert_dominant_to_mongodb(Compare_Dominant,N_gram_number):
 	client = MongoClient('mongodb://10.120.30.8:27017')
 	db = client['music']  #選擇database
 	collect = db['dominant_gram_pattern']  #選擇database.collection
-	# collect = db['dominant_gram_pattern_with_no_replace']  #選擇database.collection
 	
 	if len(Compare_Dominant) > 3:
 		for i in range(3):
@@ -247,6 +246,9 @@ def	Insert_dominant_to_mongodb(Compare_Dominant,N_gram_number):
 		
 			elif N_gram_number == 32:
 				collect.replace_one({'Dominant_32_gram': Compare_Dominant[i][0]},{'Dominant_32_gram': Compare_Dominant[i][0]},upsert=True)
+	
+	
+	# collect = db['dominant_gram_pattern_with_no_replace']  #選擇database.collection
 	
 	#搭配 collect = db['dominant_gram_pattern_with_no_replace'] 使用
 	# if len(Compare_Dominant) > 3:
@@ -312,3 +314,32 @@ def Get_dominant_from_mongodb(get_key):
 		
 	else:
 		print "請重新選擇dominant_pattern，4 or 8 or 16 or 32".decode('cp950')
+
+		
+#更新mongo by group
+
+# from bson.son import SON
+# from bson.code import Code
+# from pymongo import MongoClient
+
+# client = MongoClient('mongodb://10.120.30.8:27017')
+# db = client['music']  #選擇database
+# collect = db['dominant_gram_pattern_with_no_replace']  #選擇database.collection
+# # collect = db['dominant_gram_pattern_with_no_replace_test']  #選擇database.collection
+
+
+# pipeline = [
+     # {"$group": {"_id": '$Dominant_32_gram', "Dominant_count": {"$sum": 1}}},
+# #     {"$sort": SON([("Dominant_count", -1), ("_id", 1)])}
+    
+# ]
+# # list(collect.aggregate(pipeline))
+# Dominant_count_from_mongo = collect.aggregate(pipeline)
+
+# for Dominant in Dominant_count_from_mongo:
+# #     print Dominant['_id'],Dominant["Dominant_count"]
+# #     id = Dominant['_id']
+    # collect.update_many(
+        # {"Dominant_32_gram":Dominant['_id']},
+        # {"$set":{"Dominant_count": Dominant["Dominant_count"]}}
+    # )

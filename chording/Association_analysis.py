@@ -11,7 +11,7 @@ from pymongo import MongoClient
 # measure(小節)
 # track(聲部) track0:打A樂器;track1:打B樂器;track2:打C樂器;出現在同一小節時,各自打擊自己的節奏
 # 以下dic是字典，沒有排序
-def Association_analysis_mainfunction(dicts,id_count):
+def Association_analysis_mainfunction(dicts,id_a_count,id_b_count,id_c_count):
 	percent_value_ceiling = 0.21;
 	percent_value_floor = 0.08;
 	Measure_lists = Measure_extract_from_dictdata(dicts)
@@ -26,9 +26,9 @@ def Association_analysis_mainfunction(dicts,id_count):
 # print Measure_dict
 	Transfer_dic,Measure_dict_reverse = Transfer_dictdata(dicts,Measure_dict)
 	# print Transfer_dic
-	id_count = Insert_percussion_to_mongodb(Transfer_dic,Measure_dict_reverse,id_count)
+	id_a_count,id_b_count,id_c_count = Insert_percussion_to_mongodb(Transfer_dic,Measure_dict_reverse,id_a_count,id_b_count,id_c_count)
 	
-	return id_count
+	return id_a_count,id_b_count,id_c_count
 	
 
 #每個小節所有track合併
@@ -124,47 +124,49 @@ def Transfer_dictdata(dicts,measure_dict):
 
 
 # 塞進mongodb
-def	Insert_percussion_to_mongodb(Transfer_percussion_dict,percent_value_ceiling,percent_value_floor):
+def	Insert_percussion_to_mongodb(Transfer_dic,Measure_dict_reverse,id_a_count,id_b_count,id_c_count):
 
 	client = MongoClient('mongodb://10.120.30.8:27017')
 	db = client['music']  #選擇database
 	# collect = db['percussion_pattern']  #選擇database.collection
-	collect = db['percussion_pattern_with_track']  #選擇database.collection
+	# collect = db['percussion_pattern_with_track']  #選擇database.collection
 
 	for keys in Measure_dict_reverse:
 		if keys[0][0] == 'A':
-			collect.insert_one({'_id':id_count,'A_pattern':keys[1]})
-			id_count += 1
-			# collect.replace_one({{'_id':id_count},{'A_pattern':keys[1]}},{{'_id':id_count},{'A_pattern':keys[1]}},upsert=True)
+			# collect.insert_one({'_id':id_count,'A_pattern':keys[1]})
+			# id_count += 1
+			collect = db['percussion_pattern_with_track_A_pattern']  #選擇database.collection
+			collect.insert_one({'_id':id_a_count,'A_pattern':keys[1]})
+			# collect.replace_one({{'_id':id_a_count},{'A_pattern':keys[1]}},{{'_id':id_a_count},{'A_pattern':keys[1]}},upsert=True)
+			id_a_count += 1
 			
 		elif keys[0][0] == 'B':
-			collect.insert_one({'_id':id_count,'B_pattern':keys[1]})
-			id_count += 1
-			# collect.replace_one({{'_id':id_count},{'B_pattern':keys[1]}},{{'_id':id_count},{'B_pattern':keys[1]}},upsert=True)
-
+			# collect.insert_one({'_id':id_count,'B_pattern':keys[1]})
+			# id_count += 1
+			collect = db['percussion_pattern_with_track_B_pattern']  #選擇database.collection
+			collect.insert_one({'_id':id_b_count,'B_pattern':keys[1]})
+			# collect.replace_one({{'_id':id_b_count},{'B_pattern':keys[1]}},{{'_id':id_b_count},{'B_pattern':keys[1]}},upsert=True)
+			id_b_count += 1
+			
 		elif keys[0][0] == 'C':
-			collect.insert_one({'_id':id_count,'C_pattern':keys[1]})
-			id_count += 1
-			# collect.replace_one({{'_id':id_count},{'C_pattern':keys[1]}},{{'_id':id_count},{'C_pattern':keys[1]}},upsert=True)
-	return id_count
-	# for i in Transfer_percussion_dict:
-		# if i[1] >= percent_value_ceiling:
-			# collect.replace_one({'A_pattern': i[0]},{'A_pattern': i[0]},upsert=True)
-	
-		# elif percent_value_ceiling > i[1] >= percent_value_floor:
-			# collect.replace_one({'B_pattern': i[0]},{'B_pattern': i[0]},upsert=True)
-		
-		# else :
-			# collect.replace_one({'C_pattern': i[0]},{'C_pattern': i[0]},upsert=True)
+			# collect.insert_one({'_id':id_count,'C_pattern':keys[1]})
+			# id_count += 1
+			collect = db['percussion_pattern_with_track_C_pattern']  #選擇database.collection
+			collect.insert_one({'_id':id_c_count,'C_pattern':keys[1]})
+			# collect.replace_one({{'_id':id_c_count},{'C_pattern':keys[1]}},{{'_id':id_c_count},{'C_pattern':keys[1]}},upsert=True)
+			id_c_count += 1
+			
+	return id_a_count,id_b_count,id_c_count
 
 #從mongodb取出
 def Get_percussion_from_mongodb(get_key):
 	client = MongoClient('mongodb://10.120.30.8:27017')
 	db = client['music']  #選擇database
 	# collect = db['percussion_pattern']  #選擇database.collection
-	collect = db['percussion_pattern_with_track']  #選擇database.collection
+	# collect = db['percussion_pattern_with_track']  #選擇database.collection
 	
 	if (str(get_key) == 'A') or (str(get_key) == 'a'):
+		collect = db['percussion_pattern_with_track_A_pattern']  #選擇database.collection
 		cursor = collect.find({'A_pattern':{'$exists':True}})
 		A_pattern_list = list()
 		for doc in cursor:
@@ -172,6 +174,7 @@ def Get_percussion_from_mongodb(get_key):
 		return A_pattern_list
 	
 	elif (str(get_key) == 'B') or (str(get_key) == 'b'):
+		collect = db['percussion_pattern_with_track_B_pattern']  #選擇database.collection
 		cursor = collect.find({'B_pattern':{'$exists':True}})
 		B_pattern_list = list()
 		for doc in cursor:
@@ -179,6 +182,7 @@ def Get_percussion_from_mongodb(get_key):
 		return B_pattern_list
 	
 	elif (str(get_key) == 'C') or (str(get_key) == 'c'):
+		collect = db['percussion_pattern_with_track_C_pattern']  #選擇database.collection
 		cursor = collect.find({'C_pattern':{'$exists':True}})
 		C_pattern_list = list()
 		for doc in cursor:
@@ -187,3 +191,61 @@ def Get_percussion_from_mongodb(get_key):
 	
 	else:
 		print "請重新選擇percussion_pattern，A or B or C".decode('cp950')
+
+
+		
+#percussion使用，檢查用，更新用
+# from pymongo import MongoClient
+# import pymongo
+# client = MongoClient('mongodb://10.120.30.8:27017')
+# db = client['music']  #選擇database
+# collect = db['percussion_pattern']  #選擇database.collection
+# collect = db['percussion_pattern_with_track']  #選擇database.collection
+# collect = db['percussion_pattern_with_track_A_pattern']  #選擇database.collection
+# collect = db['percussion_pattern_with_track_B_pattern']  #選擇database.collection
+# collect = db['percussion_pattern_with_track_C_pattern']  #選擇database.collection
+
+# cursor = collect.find({'_id':{'$exists':True}})
+
+# cursor = collect.find({})
+
+
+# collect.insert({'_id': "userid", 'seq': 0})  
+# def getNextSequence(collection,name):  
+#     return collection.find_and_modify(query= { '_id': name },update= { '$inc': {'seq': 1}}, new=True ).get('seq');  
+# collect.insert({'_uid': getNextSequence(db.orgid_counter,"userid"), 'name': "Sara a"})  
+
+# pipeline = [
+#      {"$group": {"_id": '$C_pattern', 
+#                  "pattern_count": {"$sum": 1}}},
+#     {"$sort": SON([("pattern_count", -1), ("_id", 1)])}
+    
+# ]
+# pattern_count_from_mongo = list(collect.aggregate(pipeline))
+
+# for pattern in pattern_count_from_mongo:
+# #     print pattern['_id'],pattern['pattern_count']
+#     collect.update_one({"C_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
+
+
+# cursor = collect.find({'C_pattern':{'$exists':True},'pattern_count':{'$exists':True}})
+# cursor = collect.find({'C_pattern':{'$exists':True},'pattern_count':{'$exists':False}})
+
+# for doc in cursor:
+#     print doc
+#     collect.delete_one(doc)
+    
+# cursor.count()
+
+
+# for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
+    # print i+1,doc['_id'],doc['A_pattern']
+#     print doc['pattern_count']
+#     collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
+
+#     if (i+1) != doc['_id']:
+# #         print i,doc['_id'],doc['C_pattern']
+#         newdoc = {"_id":i+1,"C_pattern":doc['C_pattern']}
+# #         print newdoc
+#         collect.insert_one(newdoc)
+#         collect.delete_one({'_id':doc['_id']})

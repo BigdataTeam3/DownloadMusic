@@ -194,8 +194,8 @@ def Get_percussion_from_mongodb(get_key):
 
 
 		
-#percussion使用，更新用
-def percussion_group_in_mongo(group_key):
+#percussion使用，更新mongodb用，group
+def percussion_group_in_mongo(get_key):
 	from pymongo import MongoClient
 	import pymongo
 	client = MongoClient('mongodb://10.120.30.8:27017')
@@ -203,25 +203,29 @@ def percussion_group_in_mongo(group_key):
 # collect = db['percussion_pattern']  #選擇database.collection
 # collect = db['percussion_pattern_with_track']  #選擇database.collection
 
-
 	if (str(get_key) == 'A') or (str(get_key) == 'a'):
 		collect = db['percussion_pattern_with_track_A_pattern']  #選擇database.collection
+		
+		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
 		pipeline = [
 					{"$group": {"_id": '$A_pattern', 
 					"pattern_count": {"$sum": 1}}},
 					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
 					]
 		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-
+		
+		#對group的結果，新增pattern_count field
 		for pattern in pattern_count_from_mongo:
 			# print pattern['_id'],pattern['pattern_count']
 			collect.update_one({"A_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
-			
+		
+		#找出有A_pattern field，並且沒有pattern_count field的document，並刪除
 		# cursor = collect.find({'A_pattern':{'$exists':True},'pattern_count':{'$exists':True}})
 		cursor = collect.find({'A_pattern':{'$exists':True},'pattern_count':{'$exists':False}})
 		for doc in cursor:
 		    collect.delete_one(doc)
-
+		
+		#對剩下的doc，比對_id field，如果_id 不等於 i+1，則新增doc，刪除舊的doc
 		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
 			# print i+1,doc['_id'],doc['A_pattern'],doc['pattern_count']
 			if (i+1) != doc['_id']:
@@ -230,28 +234,34 @@ def percussion_group_in_mongo(group_key):
 				# print newdoc
 				collect.insert_one(newdoc)
 				collect.delete_one({'_id':doc['_id']})
-
+		
+		#刪除pattern_count這個field
 		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
 			collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
 			
 	elif (str(get_key) == 'B') or (str(get_key) == 'b'):
 		collect = db['percussion_pattern_with_track_B_pattern']  #選擇database.collection
+		
+		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
 		pipeline = [
 					{"$group": {"_id": '$B_pattern', 
 					"pattern_count": {"$sum": 1}}},
 					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
 					]
 		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-
+		
+		#對group的結果，新增pattern_count field
 		for pattern in pattern_count_from_mongo:
 			# print pattern['_id'],pattern['pattern_count']
 			collect.update_one({"B_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
-			
+		
+		#找出有B_pattern field，並且沒有pattern_count field的document，並刪除
 		# cursor = collect.find({'B_pattern':{'$exists':True},'pattern_count':{'$exists':True}})
 		cursor = collect.find({'B_pattern':{'$exists':True},'pattern_count':{'$exists':False}})
 		for doc in cursor:
 		    collect.delete_one(doc)
-
+		
+		#對剩下的doc，比對_id field，如果_id 不等於 i+1，則新增doc，刪除舊的doc
 		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
 			# print i+1,doc['_id'],doc['B_pattern'],doc['pattern_count']
 			if (i+1) != doc['_id']:
@@ -260,28 +270,34 @@ def percussion_group_in_mongo(group_key):
 				# print newdoc
 				collect.insert_one(newdoc)
 				collect.delete_one({'_id':doc['_id']})
-
+		
+		#刪除pattern_count這個field
 		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
 			collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
 			
 	elif (str(get_key) == 'C') or (str(get_key) == 'c'):
 		collect = db['percussion_pattern_with_track_C_pattern']  #選擇database.collection
+		
+		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
 		pipeline = [
 					{"$group": {"_id": '$C_pattern', 
 					"pattern_count": {"$sum": 1}}},
 					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
 					]
 		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-
+		
+		#對group的結果，新增pattern_count field
 		for pattern in pattern_count_from_mongo:
 			# print pattern['_id'],pattern['pattern_count']
 			collect.update_one({"C_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
-			
+		
+		#找出有C_pattern field，並且沒有pattern_count field的document，並刪除
 		# cursor = collect.find({'C_pattern':{'$exists':True},'pattern_count':{'$exists':True}})
 		cursor = collect.find({'C_pattern':{'$exists':True},'pattern_count':{'$exists':False}})
 		for doc in cursor:
 		    collect.delete_one(doc)
-
+		
+		#對剩下的doc，比對_id field，如果_id 不等於 i+1，則新增doc，刪除舊的doc
 		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
 			# print i+1,doc['_id'],doc['C_pattern'],doc['pattern_count']
 			if (i+1) != doc['_id']:
@@ -290,6 +306,70 @@ def percussion_group_in_mongo(group_key):
 				# print newdoc
 				collect.insert_one(newdoc)
 				collect.delete_one({'_id':doc['_id']})
-
+		
+		#刪除pattern_count這個field
 		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
 			collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
+
+			
+#percussion使用，更新mongodb用，計算duration_count
+def add_duration_count_in_mongo(get_key):
+	
+	client = MongoClient('mongodb://10.120.30.8:27017')
+	db = client['music']  #選擇database
+	
+	#對collect排序，把track0的measure取出，轉換每個measure，加總duration，再依排序更新collect
+	if (str(get_key) == 'A') or (str(get_key) == 'a'):
+	
+		collect = db['percussion_pattern_with_track_A_pattern']  #選擇database.collection
+		cursor = collect.find({}).sort('_id', pymongo.ASCENDING)
+		duration_count_list = [value.replace(';',',').split(',') for docs in cursor for key,value in docs['A_pattern'].items() if key == 'track0']
+		duration_count_list = [[Transfer_type_int_or_float(j) for j in i] for i in duration_count_list]
+		duration_count_list = duration_value_count(duration_count_list)
+		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
+#     print i,doc['_id'],doc,duration_count_list[i]
+			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
+	
+	#對collect排序，把track0的measure取出，轉換每個measure，加總duration，再依排序更新collect	
+	elif (str(get_key) == 'B') or (str(get_key) == 'b'):
+		
+		collect = db['percussion_pattern_with_track_B_pattern']  #選擇database.collection
+		cursor = collect.find({}).sort('_id', pymongo.ASCENDING)
+		duration_count_list = [value.replace(';',',').split(',') for docs in cursor for key,value in docs['B_pattern'].items() if key == 'track0']
+		duration_count_list = [[Transfer_type_int_or_float(j) for j in i] for i in duration_count_list]
+		duration_count_list = duration_value_count(duration_count_list)
+		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
+#     print i,doc['_id'],doc,duration_count_list[i]
+			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
+	
+	#對collect排序，把track0的measure取出，轉換每個measure，加總duration，再依排序更新collect		
+	elif (str(get_key) == 'C') or (str(get_key) == 'c'):
+		
+		collect = db['percussion_pattern_with_track_C_pattern']  #選擇database.collection
+		cursor = collect.find({}).sort('_id', pymongo.ASCENDING)
+		duration_count_list = [value.replace(';',',').split(',') for docs in cursor for key,value in docs['C_pattern'].items() if key == 'track0']
+		duration_count_list = [[Transfer_type_int_or_float(j) for j in i] for i in duration_count_list]
+		duration_count_list = duration_value_count(duration_count_list)
+		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
+#     print i,doc['_id'],doc,duration_count_list[i]
+			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
+			
+#以下兩個def，搭配 add_duration_count_in_mongo 使用
+def Transfer_type_int_or_float(Measure_element):
+    if '.' not in Measure_element:
+        return int(Measure_element)
+    else:
+        return float(Measure_element)   
+
+def duration_value_count(lists):
+    count_list =list()
+    for i in lists:
+        count_totals = 0
+        if i[0] == 1:
+            count_list.append(1.0)
+        else:
+            for j in i:
+                if type(j) == float:
+                    count_totals += j
+            count_list.append(count_totals)        
+    return count_list

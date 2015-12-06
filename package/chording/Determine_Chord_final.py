@@ -21,15 +21,15 @@ class Chord_class:
 		if num != None:
 			for c in Chord_class.chord7:
 				if set(convert(c))-set(no) == set():
-					return Chord_class.chord[c]
+					return Chord_class.chord7[c]
 			return None
 		else:
 			for c in Chord_class.chord:
 				if set(no)-set(convert(c)) == set():
 					return Chord_class.chord[c]
 			return None
-	chord7 = {(0,4,7,11):'Cmaj7',(0,2,5,9):'Dm7',(2,4,7,11):'Em7',(0,4,5,9):'Fmaj7',(2,5,7,11):'G7',(0,4,7,9):'Am7'}
-	chord = {convert((0,4,7)):'C',convert((2,5,9)):'Dm',convert((4,7,11)):'Em',convert((0,5,9)):'F',convert((2,7,11)):'G',convert((0,4,9)):'Am',convert((2,5,10)):'Bb',convert((2,5,11)):'Bdim'}
+	chord7 = {(0,4,7,11):'Cmaj7',(0,2,5,9):'Dm7',(2,4,7,11):'Em7',(0,4,5,9):'Fmaj7',(2,5,7,11):'G7',(0,4,7,9):'Am7',(0,4,7,10):'C7',(2,6,9,12):'D7',(4,8,11,2):'E7'}
+	chord = {convert((0,4,7)):'C',convert((2,5,9)):'Dm',convert((4,7,11)):'Em',convert((0,5,9)):'F',convert((2,7,11)):'G',convert((0,4,9)):'Am',convert((2,5,10)):'Bb',convert((2,5,11)):'Bdim',convert((2,6,9)):'D',convert((4,8,11)):'E',convert((1,4,9)):'A'}
 	chord_np = np.array(chord.keys())
 	key = {0:'C',2:'Dm',4:'Em',5:'F',7:'G',9:'Am',11:'Bdim'}
 
@@ -66,10 +66,12 @@ def comb_chords(result_chords):
 		sorted_chord.update({staff:[]})
 		for time in sorted(result_chords[staff]):
 			sorted_chord[staff].append((result_chords[staff][time]))
-	t = tuple(sorted_chord.values())
-	chord_more_than_1 = map(lambda *args: reduce(lambda x,y: x|y if y is not None else x,filter(lambda l:len(l)>1,args)) if filter(lambda l:l is not None and len(l)>1,args) else set(),*t)
-	chord_1 = map(lambda *args: reduce(lambda x,y: x|y,args),*t)
-	return map(lambda x,y: x if len(x)>0 else y,chord_more_than_1,chord_1)
+	len_judge = min([len(g) for g in sorted_chord.values()])
+	t = tuple([g[:len_judge] for g in sorted_chord.values()])
+
+	chord_more_than_1 = map(lambda *args: reduce(lambda x,y:x|y,args) if filter(lambda l:l is not None and len(l)>1,args) else set(),*t)
+	chord_1 = map(lambda *args: reduce(lambda x,y:x|y,args),*t)
+	return map(lambda x,y: x if x is not None and len(x)>0 else y,chord_more_than_1,chord_1)
 
 def final_determined(chord_combined):
 	final_chord = []

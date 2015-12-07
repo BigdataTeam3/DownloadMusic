@@ -408,3 +408,5 @@ def dominant_group_in_mongo(N_gram_number):
 
 		for doc in cursor:
 			collect.delete_one(doc)
+	else:
+		print "請重新選擇dominant_pattern，4 or 8 or 16 or 32".decode('cp950')

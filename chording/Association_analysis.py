@@ -310,6 +310,8 @@ def percussion_group_in_mongo(get_key):
 		#刪除pattern_count這個field
 		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
 			collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
+	else:
+		print "請重新選擇percussion_pattern，A or B or C".decode('cp950')
 
 			
 #percussion使用，更新mongodb用，計算duration_count
@@ -353,6 +355,8 @@ def add_duration_count_in_mongo(get_key):
 		for i,doc in enumerate(collect.find({}).sort('_id', pymongo.ASCENDING)):
 #     print i,doc['_id'],doc,duration_count_list[i]
 			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
+	else:
+		print "請重新選擇percussion_pattern，A or B or C".decode('cp950')
 			
 #以下兩個def，搭配 add_duration_count_in_mongo 使用
 def Transfer_type_int_or_float(Measure_element):

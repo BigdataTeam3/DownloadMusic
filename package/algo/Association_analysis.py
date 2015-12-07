@@ -5,6 +5,7 @@ from operator import itemgetter
 import collections,pymongo
 from pymongo import MongoClient
 import re
+import random
 
 # 轉換drum的每一個 Measure，轉成標籤 by Henry
 # 第一個參數是dicts，第二個跟第三個參數是轉換標籤的比率，例0.1 or 0.2
@@ -133,31 +134,42 @@ def	Insert_percussion_to_mongodb(Transfer_percussion_dict,percent_value_ceiling,
 			collect.replace_one({'C_pattern': i[0]},{'C_pattern': i[0]},upsert=True)
 
 #從mongodb取出
-def Get_percussion_from_mongodb(get_key):
+def Get_percussion_from_mongodb(get_key,seed=None):
 	client = MongoClient('mongodb://10.120.30.8:27017')
 	db = client['music']  #選擇database
-	collect = db['percussion_pattern']  #選擇database.collection
+	if seed:
+		random.seed()
+	if str(get_key) == '0':
+		return {'track0':'1,0'}
+	if str(get_key).lower() == 'a':
+		count = db.percussion_pattern_with_track_A_pattern.count()
+		collect = db['percussion_pattern_with_track_A_pattern']
+		ducount = 0
+		while ducount != 1:
+			ran = random.randint(0,count-1)
+			record = collect.find_one({'_id':ran})
+			ducount = record['duration_count']	
+		return record['A_pattern']
 	
-	if (str(get_key) == 'A') or (str(get_key) == 'a'):
-		cursor = collect.find({'A_pattern':{'$exists':True}})
-		A_pattern_list = list()
-		for doc in cursor:
-			A_pattern_list.append(doc['A_pattern'])
-		return A_pattern_list
+	elif str(get_key).lower() == 'b':
+		count = db.percussion_pattern_with_track_B_pattern.count()
+		collect = db['percussion_pattern_with_track_B_pattern']
+		ducount = 0
+		while ducount != 1:
+			ran = random.randint(0,count-1)
+			record = collect.find_one({'_id':ran})
+			ducount = record['duration_count']
+		return record['B_pattern']
 	
-	elif (str(get_key) == 'B') or (str(get_key) == 'b'):
-		cursor = collect.find({'B_pattern':{'$exists':True}})
-		B_pattern_list = list()
-		for doc in cursor:
-			B_pattern_list.append(doc['B_pattern'])
-		return B_pattern_list
-	
-	elif (str(get_key) == 'C') or (str(get_key) == 'c'):
-		cursor = collect.find({'C_pattern':{'$exists':True}})
-		C_pattern_list = list()
-		for doc in cursor:
-			C_pattern_list.append(doc['C_pattern'])
-		return C_pattern_list
+	elif str(get_key).lower() == 'c':
+		count = db.percussion_pattern_with_track_C_pattern.count()
+		collect = db['percussion_pattern_with_track_C_pattern']
+		ducount = 0
+		while ducount != 1:
+			ran = random.randint(0,count-1)
+			record = collect.find_one({'_id':ran})
+			ducount = record['duration_count']
+		return record['C_pattern']
 	
 	else:
 		print "請重新選擇percussion_pattern，A or B or C".decode('cp950')

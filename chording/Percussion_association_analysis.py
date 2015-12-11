@@ -133,24 +133,18 @@ def	Insert_percussion_to_mongodb(Transfer_dic,Measure_dict_reverse,id_a_count,id
 
 	for keys in Measure_dict_reverse:
 		if keys[0][0] == 'A':
-			# collect.insert_one({'_id':id_count,'A_pattern':keys[1]})
-			# id_count += 1
 			collect = db['percussion_pattern_with_track_A_pattern']  #選擇database.collection
 			collect.insert_one({'_id':id_a_count,'A_pattern':keys[1]})
 			# collect.replace_one({{'_id':id_a_count},{'A_pattern':keys[1]}},{{'_id':id_a_count},{'A_pattern':keys[1]}},upsert=True)
 			id_a_count += 1
 			
 		elif keys[0][0] == 'B':
-			# collect.insert_one({'_id':id_count,'B_pattern':keys[1]})
-			# id_count += 1
 			collect = db['percussion_pattern_with_track_B_pattern']  #選擇database.collection
 			collect.insert_one({'_id':id_b_count,'B_pattern':keys[1]})
 			# collect.replace_one({{'_id':id_b_count},{'B_pattern':keys[1]}},{{'_id':id_b_count},{'B_pattern':keys[1]}},upsert=True)
 			id_b_count += 1
 			
 		elif keys[0][0] == 'C':
-			# collect.insert_one({'_id':id_count,'C_pattern':keys[1]})
-			# id_count += 1
 			collect = db['percussion_pattern_with_track_C_pattern']  #選擇database.collection
 			collect.insert_one({'_id':id_c_count,'C_pattern':keys[1]})
 			# collect.replace_one({{'_id':id_c_count},{'C_pattern':keys[1]}},{{'_id':id_c_count},{'C_pattern':keys[1]}},upsert=True)
@@ -217,7 +211,8 @@ def percussion_group_in_mongo(get_key):
 		#對group的結果，新增pattern_count field
 		for pattern in pattern_count_from_mongo:
 			# print pattern['_id'],pattern['pattern_count']
-			collect.update_one({"A_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
+			if pattern["_id"] != None:
+				collect.update_one({"A_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
 		
 		#找出有A_pattern field，並且沒有pattern_count field的document，並刪除
 		# cursor = collect.find({'A_pattern':{'$exists':True},'pattern_count':{'$exists':True}})
@@ -230,8 +225,6 @@ def percussion_group_in_mongo(get_key):
 			# print i+1,doc['_id'],doc['A_pattern'],doc['pattern_count']
 			if (i+1) != doc['_id']:
 				newdoc = {"_id":i+1,"A_pattern":doc['A_pattern']}
-				# print i,doc['_id'],doc['A_pattern']
-				# print newdoc
 				collect.insert_one(newdoc)
 				collect.delete_one({'_id':doc['_id']})
 		
@@ -253,7 +246,8 @@ def percussion_group_in_mongo(get_key):
 		#對group的結果，新增pattern_count field
 		for pattern in pattern_count_from_mongo:
 			# print pattern['_id'],pattern['pattern_count']
-			collect.update_one({"B_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
+			if pattern["_id"] != None:
+				collect.update_one({"B_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
 		
 		#找出有B_pattern field，並且沒有pattern_count field的document，並刪除
 		# cursor = collect.find({'B_pattern':{'$exists':True},'pattern_count':{'$exists':True}})
@@ -266,8 +260,6 @@ def percussion_group_in_mongo(get_key):
 			# print i+1,doc['_id'],doc['B_pattern'],doc['pattern_count']
 			if (i+1) != doc['_id']:
 				newdoc = {"_id":i+1,"B_pattern":doc['B_pattern']}
-				# print i,doc['_id'],doc['B_pattern']
-				# print newdoc
 				collect.insert_one(newdoc)
 				collect.delete_one({'_id':doc['_id']})
 		
@@ -289,7 +281,8 @@ def percussion_group_in_mongo(get_key):
 		#對group的結果，新增pattern_count field
 		for pattern in pattern_count_from_mongo:
 			# print pattern['_id'],pattern['pattern_count']
-			collect.update_one({"C_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
+			if pattern["_id"] != None:
+				collect.update_one({"C_pattern":pattern['_id']},{'$set':{"pattern_count": pattern['pattern_count']}})
 		
 		#找出有C_pattern field，並且沒有pattern_count field的document，並刪除
 		# cursor = collect.find({'C_pattern':{'$exists':True},'pattern_count':{'$exists':True}})
@@ -302,8 +295,6 @@ def percussion_group_in_mongo(get_key):
 			# print i+1,doc['_id'],doc['C_pattern'],doc['pattern_count']
 			if (i+1) != doc['_id']:
 				newdoc = {"_id":i+1,"C_pattern":doc['C_pattern']}
-				# print i,doc['_id'],doc['C_pattern']
-				# print newdoc
 				collect.insert_one(newdoc)
 				collect.delete_one({'_id':doc['_id']})
 		

@@ -205,7 +205,7 @@ def random_main(times,*args):
 
 	random_list_final = list()
 	
-	if args:
+	if times and args:
 		args_list = [arg for arg in args]
 		if times and (int(args_list[0]) in gram_list) and (str(args_list[1]) in guitar_dict.keys()):
 			get_gram_key = args_list[0];
@@ -213,11 +213,13 @@ def random_main(times,*args):
 			random_list_final = [[random_main_with_instrument(get_gram_key,guitar_key)]*2 for i in range(times)]
 			random_list_final = [j for i in random_list_final for j in i]
 			return random_list_final
+		else:
+			return
 
-	elif not args:
+	elif times and not args:
 		random_list_final = [[random_main_without_instrument()]*2 for i in range(times)]
 		random_list_final = [j for i in random_list_final for j in i]
 		return random_list_final
-	
+		
 	else:
-		pass
+		return

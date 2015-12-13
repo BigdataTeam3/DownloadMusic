@@ -29,41 +29,17 @@ def N_gram_random_with_N(get_gram_key):
 	collect = db['clearedGramPattern']  #選擇database.collection
 	N = int(get_gram_key)
 	
-	if N == 4:
-		cursor = collect.find({'4gram':{'$exists':True}})
+	if N in gram_list:
+		cursor = collect.find({str(N)+'gram':{'$exists':True}})
 		chord_gram_count = cursor.count()
 		chord_gram_random = random.randint(1,chord_gram_count)
 		
-		gram_string = '4g'
+		gram_string = str(N)+'g'
 		gram_key = gram_string + str(chord_gram_random)
 		return gram_key
 	
-	elif N == 8:
-		cursor = collect.find({'8gram':{'$exists':True}})
-		chord_gram_count = cursor.count()
-		chord_gram_random = random.randint(1,chord_gram_count)
-		
-		gram_string = '8g'
-		gram_key = gram_string + str(chord_gram_random)
-		return gram_key
-		
-	elif N == 16:
-		cursor = collect.find({'16gram':{'$exists':True}})
-		chord_gram_count = cursor.count()
-		chord_gram_random = random.randint(1,chord_gram_count)
-		
-		gram_string = '16g'
-		gram_key = gram_string+str(chord_gram_random)
-		return gram_key
-	
-	elif N == 32:
-		cursor = collect.find({'32gram':{'$exists':True}})
-		chord_gram_count = cursor.count()
-		chord_gram_random = random.randint(1,chord_gram_count)
-		
-		gram_string = '32g'
-		gram_key = gram_string+str(chord_gram_random)
-		return gram_key
+	else:
+		print "請重新選擇chord_pattern，{}".decode('cp950').format(gram_list)
 
 # 完全random時，使用N_gram_random_without_N
 # 完全random時，4g及32g，跟柏安討論後，待議
@@ -71,46 +47,18 @@ def N_gram_random_with_N(get_gram_key):
 def N_gram_random_without_N():
 	collect = db['clearedGramPattern']  #選擇database.collection
 	
-	gram_string = random.choice(['8g','16g'])
+	N = random.choice(['8','16'])
 	
 	# gram_string = random.choice(['4g','8g','16g','32g'])
 	
-	if gram_string == '8g':
-		cursor = collect.find({'8gram':{'$exists':True}})
-		chord_gram_count = cursor.count()
-		chord_gram_random = random.randint(1,chord_gram_count)
-		
-		gram_key = gram_string + str(chord_gram_random)
-		get_gram_key = gram_string.split('g')[0]
-		return gram_key,get_gram_key
-		
-	elif gram_string == '16g':
-		cursor = collect.find({'16gram':{'$exists':True}})
-		chord_gram_count = cursor.count()
-		chord_gram_random = random.randint(1,chord_gram_count)
-		
-		gram_key = gram_string + str(chord_gram_random)
-		get_gram_key = gram_string.split('g')[0]
-		return gram_key,get_gram_key
+	cursor = collect.find({str(N)+'gram':{'$exists':True}})
+	chord_gram_count = cursor.count()
+	chord_gram_random = random.randint(1,chord_gram_count)
 	
-	# elif gram_string == '32g':
-		# cursor = collect.find({'32gram':{'$exists':True}})
-		# chord_gram_count = cursor.count()
-		# chord_gram_random = random.randint(1,chord_gram_count)
-		
-		# gram_key = gram_string + str(chord_gram_random)
-		# get_gram_key = gram_string.split('g')[0]
-		# return gram_key,get_gram_key
-	
-	# elif gram_string == '4g':
-		# cursor = collect.find({'4gram':{'$exists':True}})
-		# chord_gram_count = cursor.count()
-		# chord_gram_random = random.randint(1,chord_gram_count)
-		
-		# gram_key = gram_string + str(chord_gram_random)
-		# get_gram_key = gram_string.split('g')[0]
-		# return gram_key,get_gram_key
-	
+	gram_string = str(N)+'g'
+	gram_key = gram_string + str(chord_gram_random)
+	return gram_key,N
+
 #產出結果，percussion_tuple，tuple包含字串，依據grams_key 決定tuple的長度，
 # A 及 B 固定，後面的數字random，但不會超出該collection的document數量
 

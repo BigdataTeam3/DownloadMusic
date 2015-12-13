@@ -5,6 +5,7 @@
 
 from bs4 import BeautifulSoup as bs
 from decimal import *
+import re
 BDic = {Decimal('0.03125'): '32nd', Decimal('0.25'): 'quarter',
         Decimal('0.5'): 'half', Decimal('1'): 'whole', Decimal('0.00390625'): '256th', Decimal('0.015625'): '64th',
         None: 'measure', Decimal('0.0625'): '16th', Decimal('0.125'): 'eighth', Decimal('0.0078125'): '128th'}
@@ -25,13 +26,13 @@ def Percussion (testkey):
     newM = bs('')
     for stfno in range(0,len(stafflist)):
         a = filter(lambda a : a if a.keys()[0] in stafflist[stfno] else None ,testkey)
-        no = stafflist[stfno].split('ff')[-1]
+        no = re.match('.*?(\d+)',stafflist[stfno]).group(1)
         newM.append(newM.new_tag('Staff',id = no))
         mes=bs('');i=1
         for x in a:
             bag =bs('')
             mes.append(mes.new_tag('Measure',number = str(i)))
-            s = x[stafflist[stfno]]
+            s = x[stafflist[stfno]].copy()
             tkno =0                               # track number = tkno
             tkvalue = s.pop('track0')
             bag.append(PercussionUnit(tkno,tkvalue))

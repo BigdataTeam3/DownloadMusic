@@ -1,6 +1,17 @@
 import numpy as np
 from decimal import *
 
+time = {
+	'measure':Decimal(1),
+	'whole':Decimal(1),
+	'half':Decimal(1)/2,
+	'quarter':Decimal(1)/4,
+	'eighth':Decimal(1)/8,
+	'16th':Decimal(1)/16,
+	'32nd':Decimal(1)/32,
+	'64th':Decimal(1)/64,
+	'128th':Decimal(1)/128
+}
 
 def ifDots(tag):
 	if not tag.find('dots'):

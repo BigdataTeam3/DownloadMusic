@@ -22,12 +22,25 @@ chord = {
     'Bb':(10, 14, 17),
     'Bdim':(11, 14, 17)
 }
-def nextChord(beatSum, indexAcc, curChord,chordProg):
+def varChord(curChord):
+	randomInt = 0
+	#randomInt = randint(0,5)
+	notes = ''
+	for i, component in enumerate(chord[curChord], 1):
+		if (randomInt == 1 and i == 1) or (randomInt == 2 and (i == 1 or i == 2)) or randomInt == 3:
+			component += 12
+		elif randomInt == 4 or (randomInt == 5 and ((len(chord[curChord]) == 3 and i == 3) or (len(chord[curChord]) == 4 and i == 4))):
+			component -= 12
+		component += 60
+		notes += str(component) + ','
+	return notes[:-1] + ';'
+	
+def nextChord(beatSum, indexAcc,chordProg):
     indexAcc += 1
     curChord = chordProg[indexAcc]
-    diff = beatSum-Decimal(0.5)
+    diff = beatSum - Decimal(0.5)
     if diff >= 0.5:
-        beatSum, indexAcc, curChord = nextChord(diff, indexAcc, curChord)
+        beatSum, indexAcc, curChord = nextChord(diff, indexAcc)
     else:
         beatSum = diff
     return beatSum, indexAcc, curChord
@@ -42,28 +55,22 @@ def accompanyMelody(measure, chordProg):
 		totalBeatSum = 0
 		for beat in measure[key].split(';'):
 			duration = beat.split(',')[0]
-			noteOrRest = beat.split(',')[1]
-
+			noteSign = beat.split(',')[1]
 			#Determine when to select next chord
 			if beatSum >= 0.5:
-				beatSum, indexAcc, curChord = nextChord(beatSum, indexAcc, curChord,chordProg)
+				beatSum, indexAcc, curChord = nextChord(beatSum, indexAcc,chordProg)
 
-			#Generate different strings according to note or rest
-			if noteOrRest == '1':
-				re += duration + ','
-				C = 60
-				for component in chord[curChord]:
-					re += str(C+component) + ','
-				re = re[:-1] + ';'
+			#Generate different strings according to if it's a note or a rest
+			if noteSign == '1' and curChord != '0':
+				re += duration + ',' + varChord(curChord)
 			else:
 				re += duration + ',0;'
 
-			#Add 0.0000000000001 to beatSum while it's a tuplet beat
+			#Add 0.0000000000001 to beatSum while it's a tuplet note
 			if Decimal(duration) * 128 % 1 == 0:
 				beatSum += Decimal(duration)
 			else:
-				beatSum += Decimal(duration) + Decimal(0.0000000000001)
+				beatSum += Decimal(duration) + Decimal(0.000000001)
 
 		staffReturn[key] = re[:-1]
 	return staffReturn
-	

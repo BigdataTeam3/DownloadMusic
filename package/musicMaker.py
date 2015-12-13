@@ -1,5 +1,6 @@
 import re
 import sys
+import math
 from bs4 import BeautifulSoup as bs
 from chording.chord_main import *
 from percussion.extract_percussion import return_pattern as rp
@@ -10,6 +11,13 @@ from algo.Association_analysis import Get_percussion_from_mongodb as getP
 from algo.Taking_Grams import getGrams as ggr
 from algo.CombineToSheet import staffToSheet
 from pitched.AccompanyMelody import accompanyMelody as aM
+from pitched.Choidmaker import Choidmaker as maker
+from pitched.Instrument import Instrument
+from pitched.guitar_decide import patternChosen as pch
+from pitched.guitar_decide import getGuitarPattern as ggp
+from pitched.give_guitar_pitch import Dong
+from pitched.BassAdd import addBass
+
 
 class Music:
 	def __init__(self,addr,main_melody=None):
@@ -43,9 +51,25 @@ class MusicCreator:
 		self.usedStaffs = set([0])
 		self.usedTracks = set([0])
 		self.staffContents = dict()
+		self.chordPattern = None
+	def determineChords(self,gramPatterns,seed=None):
+		grams = ggr(gramPatterns,seed=seed)
+		print 'Chosen gram : '+ str(grams)
+		self.chordPattern = grams
+	def setChords(self,notations):
+		self.chordPattern = notations
+
+	
+	def summary(self):
+		for staff in self.staffContents:
+			print staff+' :'
+			print 'use instrument: '+self.staffContents[staff].instrument
+			print 'used measures: '+str(self.staffContents[staff].measures)
+			print '=========================================='
+		
 	
 	def getMeasuresPerByNotations(self,notations,seed=None,start=0,total=None):
-		nowTrack = max(self.usedTracks)+1
+		nowTrack = max(self.usedStaffs)*4+1
 		for k in range(0,start):
 			notations.insert(0,'0')
 		if total is not None:
@@ -55,7 +79,7 @@ class MusicCreator:
 		patternDic = {}
 		for notation in set(notations):
 			getkey = notation[0]
-			info = getP(getkey,seed)
+			info = getP(getkey,seed=seed)
 			patternDic.update({notation:info})
 		tempdic = {}
 		for notation in patternDic:
@@ -65,20 +89,58 @@ class MusicCreator:
 					tempdic[notation].update({'track0':patternDic[notation][track]})
 				else:
 					tempdic[notation].update({'track'+str(nowTrack+i-1):patternDic[notation][track]})
-				self.usedTracks.add(i)
+					self.usedTracks.add(nowTrack+i-1)
+		print self.usedTracks
 		return [MeasureObject(tempdic[key]) for key in notations] # a list of MeasureObjects
-	
-	def getMeasuresPitByGrams(self,gramPatterns,seed=None,rhymes=None,start=0,total=None):
-		nowTrack = max(self.usedTracks)+1
+		
+	def getGuitarPitByNotations(self,notations,type,ins_pattern='electric guitar',seed=None,start=0,total=None):
+		nowTrack = max(self.usedStaffs)*4+1
 		for k in range(0,start):
-			gramPatterns.insert(0,'0')
+			notations.insert(0,'0')
 		if total is not None:
 			for k in range(0,total-len(notations)):
-				gramPatterns.append('0')
-		grams = ggr(gramPatterns)
-		print 'Chosen gram : '+ str(grams)
+				notations.append('0')
+		fixedInstdb = pch(ins_pattern)
+		print fixedInstdb
+		patternDic = ggp(fixedInstdb,notations,type,seed=seed)
+		print patternDic
+		tempdic = {}
+		for notation in patternDic:
+			tempdic.update({notation:{}})
+			for i,track in enumerate(sorted(patternDic[notation])):
+				if track == 'track0':
+					tempdic[notation].update({'track0':patternDic[notation][track]})
+				else:
+					tempdic[notation].update({'track'+str(nowTrack+i-1):patternDic[notation][track]})
+					self.usedTracks.add(nowTrack+i-1)
+		print self.usedTracks
+		rhymes = [MeasureObject(tempdic[key]) for key in notations]
+		oneMeasureChords = map(lambda x,y:[x]+[y],self.chordPattern[::2],self.chordPattern[1::2])
+		if 'single' in type.lower():
+			preparedPatterns = map(lambda measure,chords:MeasureObject(aM(measure.content,chords)),rhymes,oneMeasureChords)
+		else:
+			preparedPatterns = map(lambda measure,chords:MeasureObject(Dong(chords,measure.content)),rhymes,oneMeasureChords)
+		return preparedPatterns
+
+	
+	def getMeasuresPitByGrams(self,rhymes=None,start=0,end=None):
+		nowTrack = max(self.usedStaffs)*4+1
+		if self.chordPattern is None:
+			print 'Please define chords first'
+			return None
+		chords = self.chordPattern
+		end = len(chords)
+		print chords
+		genPattern = []
+		for k in range(0,len(chords)):
+			if k<start:
+				genPattern.append('0')
+			elif k>=start and k<=end:
+				genPattern.append(chords[k])
+			else:
+				genPattern.append('0')
 		if rhymes:
-			if len(rhymes)*2 != len(grams):
+			if len(rhymes)*2 != len(genPattern):
 				print 'Wrong length..'
 				return None
 			modified_list = []
@@ -89,38 +151,18 @@ class MusicCreator:
 						tempdic.update({'track0':rhyme[track]})
 					else:
 						tempdic.update({'track'+str(nowTrack+i-1):rhyme[track]})
-					self.usedTracks.add(i)
+						self.usedTracks.add(int(nowTrack+i-1))
 				modified_list.append(tempdic)
-			oneMeasureChords = map(lambda x,y:[x]+[y],grams[::2],grams[1::2])
+			oneMeasureChords = map(lambda x,y:[x]+[y],genPattern[::2],genPattern[1::2])
 			preparedPatterns = map(lambda measure,chords:MeasureObject(aM(measure,chords)),modified_list,oneMeasureChords)
 		else:
-			pass # chosen rhymes from db
+			pass # choose rhymes from db
+		print self.usedTracks
 		return preparedPatterns
 		
-		
-	def getMeasuresPitByChords(self,chords,rhymes=None):
-		nowTrack = max(self.usedTracks)+1
-		whole_list = []
-		for num,chord in enumerate(map(lambda x,y:[x,y],chords[::2],chords[1::2])): # 2 chords = 1 measure
-			tempdic = {}
-			if rhymes is not None:
-				if len(rhymes) != len(chords)/2:
-					print 'chords and rhymes mismatched!'
-					return None
-				else:
-					pitched = aM(rhymes[num],list(chord))
-			else:
-				pass# add chosen rhyme codes here
-			for i,track in enumerate(pitched):
-				if track == 'track0':
-					tempdic.update({'track0':pitched[track]})
-				else:
-					tempdic.update({'track'+str(nowTrack+i):pitched[track]})
-				self.usedTracks.add(i)
-			whole_list.append(MeasureObject(tempdic))
-		return whole_list
-	
-	def addStaff(self,mclist,instrument,staffid=None):
+
+
+	def addStaff(self,mclist,instrument,solo=False,staffid=None):
 		if staffid is not None and staffid in self.usedStaffs:
 			print 'Staff id in use.'
 			return None
@@ -128,17 +170,53 @@ class MusicCreator:
 			staffid = max(self.usedStaffs)+1
 			self.usedStaffs.add(staffid)
 			num = len([mc.content for mc in mclist])
-			if instrument == 'percussionType':
+			if instrument == 'percussionType' and solo==False:
 				tmplistc = []
 				for mc in mclist:
 					tmplistc.append({'staff'+str(staffid):mc.content})
 				sta = StaffObject(num_of_measures=num,instrument=instrument,content=pc(tmplistc))
 				self.staffContents.update({'staff'+str(staffid):sta})
-			else:
+				
+				staffid += 1
+				self.usedStaffs.add(staffid)
+				bass_list = []
+				for measure in mclist:
+					tmpdic = dict()
+					c = measure.content
+					for track in c:
+						newstr = re.sub(',\d+',',0',re.sub(',36',',a',re.sub(',35',',a',c[track])))
+						if 'a' in newstr:
+							tmpdic.update({'track0':re.sub('a','1',newstr)})
+					if len(tmpdic) == 0:
+						bass_list.append({'track0':'1,0'})
+					else:
+						bass_list.append(tmpdic)
+				oneMeasureChords = map(lambda x,y:[x]+[y],self.chordPattern[::2],self.chordPattern[1::2])
+
+				pps = map(lambda measure,chords:MeasureObject(addBass(measure,chords)),bass_list,oneMeasureChords)
+				for measure in pps:
+					print measure.content
+					print '---------------------'
+				
+				tmplistc = []
+				for mc in pps:
+					tmplistc.append({'staff'+str(staffid):mc.content})
+				sta = StaffObject(num_of_measures=num,instrument='0',content=pc(tmplistc))
+				self.staffContents.update({'staff'+str(staffid):sta})
+				print 'Autometically add staff'+str(staffid)+': Bass'
+				
+			elif instrument == 'percussionType' and solo==True:
 				tmplistc = []
 				for mc in mclist:
 					tmplistc.append({'staff'+str(staffid):mc.content})
 				sta = StaffObject(num_of_measures=num,instrument=instrument,content=pc(tmplistc))
+				self.staffContents.update({'staff'+str(staffid):sta})
+				
+			else:
+				tmplistc = []
+				for mc in mclist:
+					tmplistc.append({'staff'+str(staffid):mc.content})
+				sta = StaffObject(num_of_measures=num,instrument=Instrument.getInstrumentId(instrument),content=maker(tmplistc))
 				self.staffContents.update({'staff'+str(staffid):sta})
 
 	def createSheet(self):

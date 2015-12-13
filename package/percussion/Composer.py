@@ -146,7 +146,5 @@ def Tchord(tkno,x):
     return ccc
 
 
-# In[ ]:
-
 
 

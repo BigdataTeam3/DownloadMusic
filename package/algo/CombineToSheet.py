@@ -17,8 +17,7 @@ def insertPitch(staffid,instrumentId):
 </Staff>      
 <Instrument>        
 <Channel>          
-<program value=\""""+instrumentId+"""\"/>          
-<controller ctrl="10" value="63"/>          
+<program value=\""""+instrumentId+"""\"/>            
 <synti>Fluid</synti>          
 </Channel>        
 </Instrument>      
@@ -27,14 +26,20 @@ def insertPitch(staffid,instrumentId):
 def insertPer(staffid):
 	return """
 <Part>
-<Staff id=\""""+staffid+"""\">
-<StaffType group="percussion">
-<name>perc5Line</name>
-<keysig>0</keysig>
-</StaffType>
-<defaultClef>PERC</defaultClef>
-</Staff>
-<Instrument>
+      <Staff id=\""""+staffid+"""\">
+        <StaffType group="percussion">
+          <name>perc5Line</name>
+          <keysig>0</keysig>
+          </StaffType>
+        <defaultClef>PERC</defaultClef>
+        </Staff>
+      <trackName>Drumset</trackName>
+      <Instrument>
+        <longName>Drumset</longName>
+        <shortName>Drs.</shortName>
+        <trackName>Drumset</trackName>
+        <instrumentId>drum.group.set</instrumentId>
+        <useDrumset>1</useDrumset>
         <Drum pitch="35">
           <head>0</head>
           <line>7</line>
@@ -217,14 +222,14 @@ def insertPer(staffid):
           <name>Low Conga</name>
           <stem>1</stem>
           </Drum>
-<clef>PERC</clef>
-<Channel>
-<program value="0"/>
-<controller ctrl="0" value="1"/>
-<synti>Fluid</synti>
-</Channel>
-</Instrument>
-</Part>"""
+        <clef>PERC</clef>
+        <Channel>
+          <controller ctrl="0" value="1"/>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>"""
 tail = """
 </Score>
 </museScore>"""
@@ -237,8 +242,10 @@ def staffToSheet(staffs):
 	insertst += head + '\n'
 	for staffid in sorted(staff_dic):
 		if staff_dic[staffid].instrument == 'percussionType':
+			print staffid, staff_dic[staffid].instrument
 			insertst += insertPer(str(staffid)) + '\n'
 		else:
+			print staffid, staff_dic[staffid].instrument
 			insertst += insertPitch(str(staffid),staff_dic[staffid].instrument) + '\n'
 	for staffid in sorted(staff_dic):
 		insertst += str(staff_dic[staffid].content) + '\n'

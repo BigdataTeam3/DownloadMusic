@@ -147,8 +147,9 @@ def Get_percussion_from_mongodb(get_key,seed=None):
 		ducount = 0
 		while ducount != 1:
 			ran = random.randint(0,count-1)
+			print ran
 			record = collect.find_one({'_id':ran})
-			ducount = record['duration_count']	
+			ducount = record['duration_count']
 		return record['A_pattern']
 	
 	elif str(get_key).lower() == 'b':
@@ -157,6 +158,7 @@ def Get_percussion_from_mongodb(get_key,seed=None):
 		ducount = 0
 		while ducount != 1:
 			ran = random.randint(0,count-1)
+			print ran
 			record = collect.find_one({'_id':ran})
 			ducount = record['duration_count']
 		return record['B_pattern']
@@ -165,10 +167,13 @@ def Get_percussion_from_mongodb(get_key,seed=None):
 		count = db.percussion_pattern_with_track_C_pattern.count()
 		collect = db['percussion_pattern_with_track_C_pattern']
 		ducount = 0
-		while ducount != 1:
+		s = '1'
+		while ducount != 1 and len(re.findall('[1-9];',s))<20:
 			ran = random.randint(0,count-1)
+			print ran
 			record = collect.find_one({'_id':ran})
 			ducount = record['duration_count']
+			s = record['C_pattern']
 		return record['C_pattern']
 	
 	else:

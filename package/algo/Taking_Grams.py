@@ -4,11 +4,13 @@ import re
 import random
 
 
-def getGrams(grampatterns):
+def getGrams(grampatterns,seed=None):
 	client = MongoClient('mongodb://10.120.30.8:27017')
 	db = client['music']
-	collect = db['gramPattern']
+	collect = db['clearedGramPattern']
 	dic = dict()
+	if seed:
+		random.seed()
 	for u in set(grampatterns):
 		if u == '0':
 			continue

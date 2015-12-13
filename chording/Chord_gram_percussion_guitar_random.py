@@ -205,7 +205,7 @@ def random_main(**keyword):
 
 	random_list_final = list()
 	
-	if keyword['times'] and keyword['get_gram_key'] and keyword['guitar_key']:
+	if (len(keyword) == 3) and keyword['times'] and keyword['get_gram_key'] and keyword['guitar_key']:
 		times = keyword['times'];
 		get_gram_key = keyword['get_gram_key'];
 		guitar_key = keyword['guitar_key'];
@@ -217,6 +217,7 @@ def random_main(**keyword):
 			return
 
 	elif (len(keyword) == 1) and keyword['times']:
+		times = keyword['times'];
 		random_list_final = [[random_main_without_instrument()]*2 for i in range(times)]
 		random_list_final = [j for i in random_list_final for j in i]
 		return random_list_final

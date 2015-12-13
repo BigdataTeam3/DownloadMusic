@@ -1,6 +1,6 @@
 # coding=utf-8
 
-#直接使用 random_main_with_instrument()
+#直接使用 random_main()
 
 from pymongo import MongoClient
 import pymongo,random
@@ -206,10 +206,9 @@ def random_main(times,*args):
 	random_list_final = list()
 	
 	if times and args:
-		args_list = [arg for arg in args]
-		if times and (int(args_list[0]) in gram_list) and (str(args_list[1]) in guitar_dict.keys()):
-			get_gram_key = args_list[0];
-			guitar_key = args_list[1];
+		get_gram_key = args[0];
+		guitar_key = args[1];
+		if times and (int(get_gram_key) in gram_list) and (str(guitar_key) in guitar_dict.keys()):
 			random_list_final = [[random_main_with_instrument(get_gram_key,guitar_key)]*2 for i in range(times)]
 			random_list_final = [j for i in random_list_final for j in i]
 			return random_list_final

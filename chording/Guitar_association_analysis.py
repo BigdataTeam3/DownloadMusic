@@ -8,21 +8,38 @@ from decimal import Decimal, ROUND_HALF_UP
 from bson.son import SON
 from bson.code import Code
 
+# 測試用
+# guitar_dict = {
+    # '24':'AG_nylon',
+    # '25':'AG_steel',
+    # '26':'EG_jazz',
+    # '27':'EG_clean',
+    # '28':'EG_muted',
+    # '29':'EG_overdrive',
+    # '30':'EG_distortion',
+    # '31':'EG_harmonics',
+    # '84':'EG_synth',
+# }
+
 guitar_dict = {
-    '24':'AG_nylon',
-    '25':'AG_steel',
-    '26':'EG_jazz',
-    '27':'EG_clean',
-    '28':'EG_muted',
-    '29':'EG_overdrive',
-    '30':'EG_distortion',
-    '31':'EG_harmonics',
-    '84':'EG_synth',
+    '24':'Acoustic_guitar_nylon',
+    '25':'Acoustic_guitar_steel',
+    '26':'Electric_guitar_jazz',
+    '27':'Electric_guitar_clean',
+    '28':'Electric_guitar_muted',
+    '29':'Electric_guitar_overdrive',
+    '30':'Electric_guitar_distortion',
+    '31':'Electric_Guitar_harmonics',
+    '84':'Electric_guitar_synth',
 }
+
+
 
 # 轉換drum的每一個 Measure，轉成標籤 by Henry
 # 第一個參數是dicts，第二個跟第三個參數是轉換標籤的比率，例0.1 or 0.2
-def Association_analysis_mainfunction(dicts,id_24_count,id_25_count,id_26_count,id_27_count,id_28_count,id_29_count,id_30_count,id_31_count,id_84_count,percent_value = 0.19):
+def Association_analysis_mainfunction(dicts,**keyword):
+
+	percent_value = 0.19
     Measure_lists = Measure_extract_from_dictdata(dicts)
 # print Measure_lists
     Guitar_dict = Establish_guitar_dict_sorted(Measure_lists)
@@ -36,10 +53,9 @@ def Association_analysis_mainfunction(dicts,id_24_count,id_25_count,id_26_count,
 #     print order_value
     Measure_dict_reverse = Transfer_dictdata(dicts,Measure_dict)
 	# print Transfer_list
-    id_24_count,id_25_count,id_26_count,id_27_count,id_28_count,id_29_count,id_30_count,id_31_count,id_84_count = \
-	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,id_24_count,id_25_count,id_26_count,id_27_count,id_28_count,id_29_count,id_30_count,id_31_count,id_84_count)
+    count_dicts = Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword)
 	
-    return id_24_count,id_25_count,id_26_count,id_27_count,id_28_count,id_29_count,id_30_count,id_31_count,id_84_count
+    return count_dicts
 
 	
 # 先將lists of dicts 的value取出來，以一個Measure為單位，建立lists，
@@ -113,10 +129,8 @@ def Transfer_dictdata(dicts,measure_dict):
 	return Measure_dict_reverse
 
 
-
-
 # 塞進mongodb
-def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,id_24_count,id_25_count,id_26_count,id_27_count,id_28_count,id_29_count,id_30_count,id_31_count,id_84_count):
+def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword):
 
 	client = MongoClient('mongodb://10.120.30.8:27017')
 	db = client['music']  #選擇database
@@ -125,164 +139,106 @@ def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,id_24_count,id_25_count,
 	
 	guitar_collection_number = [key[:2] for key in dicts][0]
 	
-	if int(guitar_collection_number) == 24:
-		guitar_collection = [guitar_dict[key[:2]] for key in dicts][0]
+	if (str(guitar_collection_number) in guitar_dict.keys()):
+		guitar_collection = guitar_dict[str(guitar_collection_number)]
 		collect = db[guitar_collection]  #選擇database.collection
-		for key,value in Measure_dict_reverse.items():
-			collect.insert_one({'_id':id_24_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+		
+		if int(guitar_collection_number) == 24:
+		
+			id_24_count = keyword['id_'+str(guitar_collection_number)+'_count']
 			#insert_one中間的是single_track or multi_track
-			# collect.replace_one({{'_id':id_24_count},{'A_pattern':key[1]}},{{'_id':id_24_count},{'A_pattern':key[1]}},upsert=True)
-			id_24_count += 1
-			
-	elif int(guitar_collection_number) == 25:
-		guitar_collection = [guitar_dict[key[:2]] for key in dicts][0]
-		collect = db[guitar_collection]  #選擇database.collection
-		for key,value in Measure_dict_reverse.items():
-			collect.insert_one({'_id':id_25_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+			for key,value in Measure_dict_reverse.items():
+				collect.insert_one({'_id':id_24_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+				id_24_count += 1
+				
+		elif int(guitar_collection_number) == 25:
+		
+			id_25_count = keyword['id_'+str(guitar_collection_number)+'_count']
 			#insert_one中間的是single_track or multi_track
-			# collect.replace_one({{'_id':id_25_count},{'A_pattern':key[1]}},{{'_id':id_25_count},{'A_pattern':key[1]}},upsert=True)
-			id_25_count += 1
+			for key,value in Measure_dict_reverse.items():
+				collect.insert_one({'_id':id_25_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+				id_25_count += 1
+				
+		elif int(guitar_collection_number) == 26:
 			
-	elif int(guitar_collection_number) == 26:
-		guitar_collection = [guitar_dict[key[:2]] for key in dicts][0]
-		collect = db[guitar_collection]  #選擇database.collection
-		for key,value in Measure_dict_reverse.items():
-			collect.insert_one({'_id':id_26_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+			id_26_count = keyword['id_'+str(guitar_collection_number)+'_count']
 			#insert_one中間的是single_track or multi_track
-			# collect.replace_one({{'_id':id_26_count},{'A_pattern':key[1]}},{{'_id':id_26_count},{'A_pattern':key[1]}},upsert=True)
-			id_26_count += 1
+			for key,value in Measure_dict_reverse.items():
+				collect.insert_one({'_id':id_26_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+				id_26_count += 1
+				
+		elif int(guitar_collection_number) == 27:
 			
-	elif int(guitar_collection_number) == 27:
-		guitar_collection = [guitar_dict[key[:2]] for key in dicts][0]
-		collect = db[guitar_collection]  #選擇database.collection
-		for key,value in Measure_dict_reverse.items():
-			collect.insert_one({'_id':id_27_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+			id_27_count = keyword['id_'+str(guitar_collection_number)+'_count']
 			#insert_one中間的是single_track or multi_track
-			# collect.replace_one({{'_id':id_27_count},{'A_pattern':key[1]}},{{'_id':id_27_count},{'A_pattern':key[1]}},upsert=True)
-			id_27_count += 1
+			for key,value in Measure_dict_reverse.items():
+				collect.insert_one({'_id':id_27_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+				id_27_count += 1
+				
+		elif int(guitar_collection_number) == 28:
 			
-	elif int(guitar_collection_number) == 28:
-		guitar_collection = [guitar_dict[key[:2]] for key in dicts][0]
-		collect = db[guitar_collection]  #選擇database.collection
-		for key,value in Measure_dict_reverse.items():
-			collect.insert_one({'_id':id_28_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+			id_28_count = keyword['id_'+str(guitar_collection_number)+'_count']
 			#insert_one中間的是single_track or multi_track
-			# collect.replace_one({{'_id':id_28_count},{'A_pattern':key[1]}},{{'_id':id_28_count},{'A_pattern':key[1]}},upsert=True)
-			id_28_count += 1
+			for key,value in Measure_dict_reverse.items():
+				collect.insert_one({'_id':id_28_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+				id_28_count += 1
+				
+		elif int(guitar_collection_number) == 29:
 			
-	elif int(guitar_collection_number) == 29:
-		guitar_collection = [guitar_dict[key[:2]] for key in dicts][0]
-		collect = db[guitar_collection]  #選擇database.collection
-		for key,value in Measure_dict_reverse.items():
-			collect.insert_one({'_id':id_29_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+			id_29_count = keyword['id_'+str(guitar_collection_number)+'_count']
 			#insert_one中間的是single_track or multi_track
-			# collect.replace_one({{'_id':id_29_count},{'A_pattern':key[1]}},{{'_id':id_29_count},{'A_pattern':key[1]}},upsert=True)
-			id_29_count += 1
+			for key,value in Measure_dict_reverse.items():
+				collect.insert_one({'_id':id_29_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+				id_29_count += 1
+				
+		elif int(guitar_collection_number) == 30:
 			
-	elif int(guitar_collection_number) == 30:
-		guitar_collection = [guitar_dict[key[:2]] for key in dicts][0]
-		collect = db[guitar_collection]  #選擇database.collection
-		for key,value in Measure_dict_reverse.items():
-			collect.insert_one({'_id':id_30_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+			id_30_count = keyword['id_'+str(guitar_collection_number)+'_count']
 			#insert_one中間的是single_track or multi_track
-			# collect.replace_one({{'_id':id_30_count},{'A_pattern':key[1]}},{{'_id':id_30_count},{'A_pattern':key[1]}},upsert=True)
-			id_30_count += 1
+			for key,value in Measure_dict_reverse.items():
+				collect.insert_one({'_id':id_30_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+				id_30_count += 1
+				
+		elif int(guitar_collection_number) == 31:
 			
-	elif int(guitar_collection_number) == 31:
-		guitar_collection = [guitar_dict[key[:2]] for key in dicts][0]
-		collect = db[guitar_collection]  #選擇database.collection
-		for key,value in Measure_dict_reverse.items():
-			collect.insert_one({'_id':id_31_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+			id_31_count = keyword['id_'+str(guitar_collection_number)+'_count']
 			#insert_one中間的是single_track or multi_track
-			# collect.replace_one({{'_id':id_31_count},{'A_pattern':key[1]}},{{'_id':id_31_count},{'A_pattern':key[1]}},upsert=True)
-			id_31_count += 1
+			for key,value in Measure_dict_reverse.items():
+				collect.insert_one({'_id':id_31_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+				id_31_count += 1
+				
+		elif int(guitar_collection_number) == 84:
 			
-	elif int(guitar_collection_number) == 84:
-		guitar_collection = [guitar_dict[key[:2]] for key in dicts][0]
-		collect = db[guitar_collection]  #選擇database.collection
-		for key,value in Measure_dict_reverse.items():
-			collect.insert_one({'_id':id_84_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+			id_84_count = keyword['id_'+str(guitar_collection_number)+'_count']
 			#insert_one中間的是single_track or multi_track
-			# collect.replace_one({{'_id':id_84_count},{'A_pattern':key[1]}},{{'_id':id_84_count},{'A_pattern':key[1]}},upsert=True)
-			id_84_count += 1
-			
-	return id_24_count,id_25_count,id_26_count,id_27_count,id_28_count,id_29_count,id_30_count,id_31_count,id_84_count
-	
+			for key,value in Measure_dict_reverse.items():
+				collect.insert_one({'_id':id_84_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+				id_84_count += 1
+				
+		count_dicts = {"id_24_count":keyword["id_24_count"],"id_25_count":keyword["id_25_count"],
+					"id_26_count":keyword["id_26_count"],"id_27_count":keyword["id_27_count"],
+					"id_28_count":keyword["id_28_count"],"id_29_count":keyword["id_29_count"],
+					"id_30_count":keyword["id_30_count"],"id_31_count":keyword["id_31_count"],
+					"id_84_count":keyword["id_84_count"]}
+					
+		return count_dicts
+		
+	else:
+		print "請重新選擇guitar_pattern，{}".decode('cp950').format(guitar_dict.keys())
 
 #從mongodb取出
-def Get_guitar_from_mongodb(get_key):
+def Get_guitar_from_mongodb(**keyword):
 	client = MongoClient('mongodb://10.120.30.8:27017')
 	db = client['music']  #選擇database
 	# collect = db['guitar_pattern']  #選擇database.collection
 	# collect = db['guitar_pattern_with_track']  #選擇database.collection
+
+	get_key = keyword['get_key']
 	
-	
-	if int(get_key) == 24:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		cursor = collect.find({})
-		guitar_list = list()
-		for doc in cursor:
-			guitar_list.append(doc)
-		return guitar_list
-	
-	elif int(get_key) == 25:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		cursor = collect.find({})
-		guitar_list = list()
-		for doc in cursor:
-			guitar_list.append(doc)
-		return guitar_list
-	
-	elif int(get_key) == 26:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		cursor = collect.find({})
-		guitar_list = list()
-		for doc in cursor:
-			guitar_list.append(doc)
-		return guitar_list
+	if (str(get_key) in guitar_dict.keys()):
+		guitar_collection = guitar_dict[str(get_key)]
+		collect = db[guitar_collection]  #選擇database.collection
 		
-	elif int(get_key) == 27:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		cursor = collect.find({})
-		guitar_list = list()
-		for doc in cursor:
-			guitar_list.append(doc)
-		return guitar_list
-		
-	elif int(get_key) == 28:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		cursor = collect.find({})
-		guitar_list = list()
-		for doc in cursor:
-			guitar_list.append(doc)
-		return guitar_list
-		
-	elif int(get_key) == 29:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		cursor = collect.find({})
-		guitar_list = list()
-		for doc in cursor:
-			guitar_list.append(doc)
-		return guitar_list
-		
-	elif int(get_key) == 30:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		cursor = collect.find({})
-		guitar_list = list()
-		for doc in cursor:
-			guitar_list.append(doc)
-		return guitar_list
-		
-	elif int(get_key) == 31:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		cursor = collect.find({})
-		guitar_list = list()
-		for doc in cursor:
-			guitar_list.append(doc)
-		return guitar_list
-		
-	elif int(get_key) == 84:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
 		cursor = collect.find({})
 		guitar_list = list()
 		for doc in cursor:
@@ -290,483 +246,22 @@ def Get_guitar_from_mongodb(get_key):
 		return guitar_list
 		
 	else:
-		print "請重新選擇guitar_pattern".decode('cp950')
+		print "請重新選擇guitar_pattern，{}".decode('cp950').format(guitar_dict.keys())
 
 		
 #guitar使用，更新mongodb用，group
-def guitar_group_in_mongo(get_key):
+def guitar_group_in_mongo(**keyword):
 
 	client = MongoClient('mongodb://10.120.30.8:27017')
 	db = client['music']  #選擇database
 # collect = db['guitar_pattern']  #選擇database.collection
 # collect = db['guitar_pattern_with_track']  #選擇database.collection
-
-	if int(get_key) == 24:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		#single_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$single_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"single_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有single_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"single_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#multi_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$multi_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"multi_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有multi_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"multi_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#對剩下的doc，比對_id field，如果_id 不等於 i+1，則新增doc，刪除舊的doc
-		cursor = collect.find({}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			if doc.keys()[2] == 'single_track':
-				newdoc = {"_id":str(i+1)+'_single',"single_track":doc["single_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-			elif doc.keys()[2] == 'multi_track':
-				newdoc = {"_id":str(i+1)+'_multi',"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-		
-		id_count = 1
-		cursor = collect.find({"single_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"single_track":doc["single_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		cursor = collect.find({"multi_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		#刪除pattern_count這個field
-		# cursor = collect.find({'single_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
-		# cursor = collect.find({'multi_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-		
-	elif int(get_key) == 25:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		#single_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$single_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"single_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有single_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"single_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#multi_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$multi_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"multi_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有multi_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"multi_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#對剩下的doc，比對_id field，如果_id 不等於 i+1，則新增doc，刪除舊的doc
-		cursor = collect.find({}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			if doc.keys()[2] == 'single_track':
-				newdoc = {"_id":str(i+1)+'_single',"single_track":doc["single_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-			elif doc.keys()[2] == 'multi_track':
-				newdoc = {"_id":str(i+1)+'_multi',"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-		
-		
-		id_count = 1
-		cursor = collect.find({"single_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"single_track":doc["single_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		cursor = collect.find({"multi_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		#刪除pattern_count這個field
-		# cursor = collect.find({'single_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
-		# cursor = collect.find({'multi_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
 	
-	elif int(get_key) == 26:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		#single_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$single_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"single_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有single_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"single_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#multi_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$multi_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"multi_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有multi_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"multi_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#對剩下的doc，比對_id field，如果_id 不等於 i+1，則新增doc，刪除舊的doc
-		cursor = collect.find({}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			if doc.keys()[2] == 'single_track':
-				newdoc = {"_id":str(i+1)+'_single',"single_track":doc["single_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-			elif doc.keys()[2] == 'multi_track':
-				newdoc = {"_id":str(i+1)+'_multi',"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-		
-		
-		id_count = 1
-		cursor = collect.find({"single_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"single_track":doc["single_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		cursor = collect.find({"multi_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		#刪除pattern_count這個field
-		# cursor = collect.find({'single_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
-		# cursor = collect.find({'multi_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
-	elif int(get_key) == 27:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		#single_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$single_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"single_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有single_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"single_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#multi_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$multi_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"multi_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有multi_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"multi_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#對剩下的doc，比對_id field，如果_id 不等於 i+1，則新增doc，刪除舊的doc
-		cursor = collect.find({}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			if doc.keys()[2] == 'single_track':
-				newdoc = {"_id":str(i+1)+'_single',"single_track":doc["single_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-			elif doc.keys()[2] == 'multi_track':
-				newdoc = {"_id":str(i+1)+'_multi',"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-		
-		id_count = 1
-		cursor = collect.find({"single_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"single_track":doc["single_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		cursor = collect.find({"multi_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		#刪除pattern_count這個field
-		# cursor = collect.find({'single_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
-		# cursor = collect.find({'multi_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
-	elif int(get_key) == 28:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		#single_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$single_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"single_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有single_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"single_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#multi_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$multi_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"multi_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有multi_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"multi_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#對剩下的doc，比對_id field，如果_id 不等於 i+1，則新增doc，刪除舊的doc
-		cursor = collect.find({}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			if doc.keys()[2] == 'single_track':
-				newdoc = {"_id":str(i+1)+'_single',"single_track":doc["single_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-			elif doc.keys()[2] == 'multi_track':
-				newdoc = {"_id":str(i+1)+'_multi',"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-		
-		id_count = 1
-		cursor = collect.find({"single_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"single_track":doc["single_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		cursor = collect.find({"multi_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		#刪除pattern_count這個field
-		# cursor = collect.find({'single_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
-		# cursor = collect.find({'multi_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
-	elif int(get_key) == 29:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		#single_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$single_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"single_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有single_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"single_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#multi_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$multi_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"multi_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有multi_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"multi_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#對剩下的doc，比對_id field，如果_id 不等於 i+1，則新增doc，刪除舊的doc
-		cursor = collect.find({}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			if doc.keys()[2] == 'single_track':
-				newdoc = {"_id":str(i+1)+'_single',"single_track":doc["single_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-			elif doc.keys()[2] == 'multi_track':
-				newdoc = {"_id":str(i+1)+'_multi',"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-		
-		id_count = 1
-		cursor = collect.find({"single_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"single_track":doc["single_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		cursor = collect.find({"multi_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		#刪除pattern_count這個field
-		# cursor = collect.find({'single_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
-		# cursor = collect.find({'multi_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
+	get_key = keyword['get_key']
 	
-	elif int(get_key) == 30:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
+	if (str(get_key) in guitar_dict.keys()):
+		guitar_collection = guitar_dict[str(get_key)]
+		collect = db[guitar_collection]  #選擇database.collection
 		
 		#single_track
 		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
@@ -809,89 +304,12 @@ def guitar_group_in_mongo(get_key):
 		#對剩下的doc，比對_id field，如果_id 不等於 i+1，則新增doc，刪除舊的doc
 		cursor = collect.find({}).sort("_id", pymongo.ASCENDING)
 		for i,doc in enumerate(cursor):
-			if doc.keys()[2] == 'single_track':
-				newdoc = {"_id":str(i+1)+'_single',"single_track":doc["single_track"],"pattern":doc["pattern"]}
+			if doc.keys()[2] == "single_track":
+				newdoc = {"_id":str(i+1)+"_single","single_track":doc["single_track"],"pattern":doc["pattern"]}
 				collect.insert_one(newdoc)
 				collect.delete_one({"_id":doc["_id"]})
-			elif doc.keys()[2] == 'multi_track':
-				newdoc = {"_id":str(i+1)+'_multi',"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-		
-		id_count = 1
-		cursor = collect.find({"single_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"single_track":doc["single_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		cursor = collect.find({"multi_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		#刪除pattern_count這個field
-		# cursor = collect.find({'single_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
-		# cursor = collect.find({'multi_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
-	elif int(get_key) == 31:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		#single_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$single_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"single_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有single_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"single_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#multi_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$multi_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"multi_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有multi_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"multi_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#對剩下的doc，比對_id field，如果_id 不等於 i+1，則新增doc，刪除舊的doc
-		cursor = collect.find({}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			if doc.keys()[2] == 'single_track':
-				newdoc = {"_id":str(i+1)+'_single',"single_track":doc["single_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-			elif doc.keys()[2] == 'multi_track':
-				newdoc = {"_id":str(i+1)+'_multi',"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
+			elif doc.keys()[2] == "multi_track":
+				newdoc = {"_id":str(i+1)+"_multi","multi_track":doc["multi_track"],"pattern":doc["pattern"]}
 				collect.insert_one(newdoc)
 				collect.delete_one({"_id":doc["_id"]})
 		
@@ -911,278 +329,52 @@ def guitar_group_in_mongo(get_key):
 			id_count += 1
 		
 		#刪除pattern_count這個field
-		# cursor = collect.find({'single_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
+		# cursor = collect.find({"single_track":{"$exists":True},"pattern_count":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
 		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
+			# collect.update_one({"_id":doc["_id"]},{"$unset":{"pattern_count": doc["pattern_count"]}})
 			
-		# cursor = collect.find({'multi_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
+		# cursor = collect.find({"multi_track":{"$exists":True},"pattern_count":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
 		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
-	elif int(get_key) == 84:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
+			# collect.update_one({"_id":doc["_id"]},{"$unset":{"pattern_count": doc["pattern_count"]}})
 		
-		#single_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$single_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"single_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有single_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"single_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#multi_track
-		#使用collect.aggregate，效用等同於group，以measure的pattern搜尋，並加總、排序
-		pipeline = [
-					{"$group": {"_id": "$multi_track", 
-					"pattern_count": {"$sum": 1}}},
-					{"$sort": SON([("pattern_count", -1), ("_id", 1)])}
-					]
-		pattern_count_from_mongo = list(collect.aggregate(pipeline))
-		
-		#對group的結果，新增pattern_count field
-		for pattern in pattern_count_from_mongo:
-			if pattern["_id"] != None:
-				collect.update_one({"multi_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
-		
-		#找出有multi_track field，並且沒有pattern_count field的document，並刪除
-		cursor = collect.find({"multi_track":{"$exists":True},"pattern_count":{"$exists":False}})
-		for doc in cursor:
-		    collect.delete_one(doc)
-		
-		#對剩下的doc，比對_id field，如果_id 不等於 i+1，則新增doc，刪除舊的doc
-		cursor = collect.find({}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			if doc.keys()[2] == 'single_track':
-				newdoc = {"_id":str(i+1)+'_single',"single_track":doc["single_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-			elif doc.keys()[2] == 'multi_track':
-				newdoc = {"_id":str(i+1)+'_multi',"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-		
-		id_count = 1
-		cursor = collect.find({"single_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"single_track":doc["single_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		cursor = collect.find({"multi_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"multi_track":doc["multi_track"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		#刪除pattern_count這個field
-		# cursor = collect.find({'single_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
-		# cursor = collect.find({'multi_track':{'$exists':True},'pattern_count':{'$exists':True}}).sort('_id', pymongo.ASCENDING)
-		# for doc in cursor:
-			# collect.update_one({'_id':doc['_id']},{'$unset':{"pattern_count": doc['pattern_count']}})
-			
 	else:
-		print "請重新選擇guitar_pattern".decode('cp950')
+		print "請重新選擇guitar_pattern，{}".decode("cp950").format(guitar_dict.keys())
 			
 #guitar使用，更新mongodb用，計算duration_count
-def add_duration_count_in_mongo(get_key):
+def add_duration_count_in_mongo(**keyword):
 	
 	client = MongoClient('mongodb://10.120.30.8:27017')
 	db = client['music']  #選擇database
 	
-	#對collect排序，把track0的measure取出，轉換每個measure，加總duration，再依排序更新collect
-	if int(get_key) == 24:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['single_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-		
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['multi_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-			
-	elif int(get_key) == 25:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['single_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-		
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['multi_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-			
-	elif int(get_key) == 26:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['single_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-		
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['multi_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-			
-	elif int(get_key) == 27:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['single_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-		
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['multi_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-			
-	elif int(get_key) == 28:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['single_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-		
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['multi_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-			
-	elif int(get_key) == 29:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['single_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-		
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['multi_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-			
-	elif int(get_key) == 30:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['single_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-		
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['multi_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-			
-	elif int(get_key) == 31:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['single_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-		
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['multi_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-			
-	elif int(get_key) == 84:
-		collect = db[guitar_dict[get_key]]  #選擇database.collection
-		
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['single_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'single_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
-		
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for doc in cursor for key,value in doc['multi_track'].items() if key == 'track0']
-		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
-		duration_count_list = duration_value_count(duration_count_list)
-		cursor = collect.find({'multi_track':{'$exists':True}}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			collect.update_one({'_id':doc['_id']},{'$set':{"duration_count": duration_count_list[i]}})
+	get_key = keyword['get_key']
 	
+	#對collect排序，把track0的measure取出，轉換每個measure，加總duration，再依排序更新collect
+	if (str(get_key) in guitar_dict.keys()):
+		guitar_collection = guitar_dict[str(get_key)]
+		collect = db[guitar_collection]  #選擇database.collection
+		
+		cursor = collect.find({"single_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
+		duration_count_list = [value.replace(";",",").split(",") for doc in cursor for key,value in doc["single_track"].items() if key == "track0"]
+		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
+		duration_count_list = duration_value_count(duration_count_list)
+		cursor = collect.find({"single_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
+		for i,doc in enumerate(cursor):
+			collect.update_one({"_id":doc["_id"]},{"$set":{"duration_count": duration_count_list[i]}})
+		
+		cursor = collect.find({"multi_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
+		duration_count_list = [value.replace(";",",").split(",") for doc in cursor for key,value in doc["multi_track"].items() if key == "track0"]
+		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
+		duration_count_list = duration_value_count(duration_count_list)
+		cursor = collect.find({"multi_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
+		for i,doc in enumerate(cursor):
+			collect.update_one({"_id":doc["_id"]},{"$set":{"duration_count": duration_count_list[i]}})
+			
 	else:
-		print "請重新選擇guitar_pattern，A or B".decode('cp950')
+		print "請重新選擇guitar_pattern，{}".decode("cp950").format(guitar_dict.keys())
 			
 #以下兩個def，搭配 add_duration_count_in_mongo 使用
 def Transfer_type_int_or_Decimal(Measure_element):
-    if '.' in Measure_element:
+    if "." in Measure_element:
         return Decimal(Measure_element)
     else:
         return int(Measure_element)  
@@ -1197,6 +389,6 @@ def duration_value_count(lists):
             for j in i:
                 if type(j) == Decimal:
                     count_totals += j
-            count_list.append(float(Decimal(count_totals).quantize(Decimal('1.0000'), rounding=ROUND_HALF_UP)))
+            count_list.append(float(Decimal(count_totals).quantize(Decimal("1.0000"), rounding=ROUND_HALF_UP)))
 
     return count_list

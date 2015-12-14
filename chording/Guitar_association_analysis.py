@@ -8,7 +8,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from bson.son import SON
 from bson.code import Code
 
-# ´ú¸Õ¥Î
+# æ¸¬è©¦ç”¨
 # guitar_dict = {
     # '24':'AG_nylon',
     # '25':'AG_steel',
@@ -35,8 +35,8 @@ guitar_dict = {
 
 
 
-# Âà´«drumªº¨C¤@­Ó Measure¡AÂà¦¨¼ĞÅÒ by Henry
-# ²Ä¤@­Ó°Ñ¼Æ¬Odicts¡A²Ä¤G­Ó¸ò²Ä¤T­Ó°Ñ¼Æ¬OÂà´«¼ĞÅÒªº¤ñ²v¡A¨Ò0.1 or 0.2
+# è½‰æ›drumçš„æ¯ä¸€å€‹ Measureï¼Œè½‰æˆæ¨™ç±¤ by Henry
+# ç¬¬ä¸€å€‹åƒæ•¸æ˜¯dictsï¼Œç¬¬äºŒå€‹è·Ÿç¬¬ä¸‰å€‹åƒæ•¸æ˜¯è½‰æ›æ¨™ç±¤çš„æ¯”ç‡ï¼Œä¾‹0.1 or 0.2
 def Association_analysis_mainfunction(dicts,**keyword):
 
 	percent_value = 0.19
@@ -58,8 +58,8 @@ def Association_analysis_mainfunction(dicts,**keyword):
     return count_dicts
 
 	
-# ¥ı±Nlists of dicts ªºvalue¨ú¥X¨Ó¡A¥H¤@­ÓMeasure¬°³æ¦ì¡A«Ø¥ßlists¡A
-# ¦pªG¦³¦h­Ótrack¦b¦P¤@­ÓMeasure¡A¦X¨Ö¨ì¦P¤@­Ólists¸Ì­±	
+# å…ˆå°‡lists of dicts çš„valueå–å‡ºä¾†ï¼Œä»¥ä¸€å€‹Measureç‚ºå–®ä½ï¼Œå»ºç«‹listsï¼Œ
+# å¦‚æœæœ‰å¤šå€‹trackåœ¨åŒä¸€å€‹Measureï¼Œåˆä½µåˆ°åŒä¸€å€‹listsè£¡é¢	
 def Measure_extract_from_dictdata(dicts):
     values_lists = [[value for key,value in values.items()] \
 	for keyss,valuess in dicts.items() for i in valuess for keys,values in i.items()]
@@ -67,7 +67,7 @@ def Measure_extract_from_dictdata(dicts):
     return values_lists
 
 
-# ²Ö­p¨C­ÓMeasure lists¥X²{ªº¦¸¼Æ¡A¨Ã«Ø¥ß ±Æ§Çdicts¡A{key = measure_lists , value = ¦¸¼Æ}¡A¨Ã¥B¨Ì¦¸¼Æ±Æ§Ç
+# ç´¯è¨ˆæ¯å€‹Measure listså‡ºç¾çš„æ¬¡æ•¸ï¼Œä¸¦å»ºç«‹ æ’åºdictsï¼Œ{key = measure_lists , value = æ¬¡æ•¸}ï¼Œä¸¦ä¸”ä¾æ¬¡æ•¸æ’åº
 def Establish_guitar_dict_sorted(values_lists):
     Guitar_dict = dict()
     for measure in values_lists:
@@ -81,7 +81,7 @@ def Count_total(x, y):
 def Transfer_percent(x, y):
     return round(float(x)/float(y),3)
 
-# ±q ±Æ§Çdicts¡A¦A«Ø¥ß¤@­Ó  ¦Ê¤À¤ñÂà´«dicts¡A{key = ¦¸¼Æ¡Avalue = ¦Ê¤À¤ñ}
+# å¾ æ’åºdictsï¼Œå†å»ºç«‹ä¸€å€‹  ç™¾åˆ†æ¯”è½‰æ›dictsï¼Œ{key = æ¬¡æ•¸ï¼Œvalue = ç™¾åˆ†æ¯”}
 def Establish_percent_dict(Guitar_dict):
     count_list = [i[1] for i in Guitar_dict]
     count_totals = 0 
@@ -89,7 +89,7 @@ def Establish_percent_dict(Guitar_dict):
     percent_dict = {i:Transfer_percent(i,count_totals) for i in count_list}
     return percent_dict
    
-# ±N ±Æ§Çdictsªº¦¸¼Æ¡A®M¥Î  ¦Ê¤À¤ñÂà´«dicts
+# å°‡ æ’åºdictsçš„æ¬¡æ•¸ï¼Œå¥—ç”¨  ç™¾åˆ†æ¯”è½‰æ›dicts
 def Transfer_guitar_dict_percent(Guitar_dict,percent_dict):
     Transfer_guitar_dict = dict()
     for (key,value) in Guitar_dict:
@@ -97,8 +97,8 @@ def Transfer_guitar_dict_percent(Guitar_dict,percent_dict):
     Transfer_guitar_dict = sorted(Transfer_guitar_dict.items(), key=itemgetter(1), reverse=True)
     return Transfer_guitar_dict
 
-# ¹ïÂà´«§¹ªº ±Æ§Çdicts¡A®Ú¾Ú¦Ê¤À¤ñ¡A¦A«Ø¥ß ¼ĞÅÒdicts¡A
-#{Measure lists¡AÂà¦¨¼ĞÅÒ¡A¤j©ópercent_value¡A¬°A1,A2...¡A¤p©ópercent_value¡A¬°B1,B2...}
+# å°è½‰æ›å®Œçš„ æ’åºdictsï¼Œæ ¹æ“šç™¾åˆ†æ¯”ï¼Œå†å»ºç«‹ æ¨™ç±¤dictsï¼Œ
+#{Measure listsï¼Œè½‰æˆæ¨™ç±¤ï¼Œå¤§æ–¼percent_valueï¼Œç‚ºA1,A2...ï¼Œå°æ–¼percent_valueï¼Œç‚ºB1,B2...}
 def Establish_measure_dict(Transfer_guitar_dict,percent_value):
 	measure_dict = dict()
 	count_A = 0
@@ -116,8 +116,8 @@ def Establish_measure_dict(Transfer_guitar_dict,percent_value):
 			
 	return measure_dict,order_value
 
-# ®M¥Î¼ĞÅÒdicts
-# Âà´«­ì¥ıªºdicts¡A¥ş³¡Measure Âà¦¨¼ĞÅÒ
+# å¥—ç”¨æ¨™ç±¤dicts
+# è½‰æ›åŸå…ˆçš„dictsï¼Œå…¨éƒ¨Measure è½‰æˆæ¨™ç±¤
 def Transfer_dictdata(dicts,measure_dict):
 	Measure_dict_reverse = dict()
 	values_dicts_lists = [{",".join([value for key,value in values.items()]):i \
@@ -129,24 +129,24 @@ def Transfer_dictdata(dicts,measure_dict):
 	return Measure_dict_reverse
 
 
-# ¶ë¶imongodb
+# å¡é€²mongodb
 def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword):
 
 	client = MongoClient('mongodb://10.120.30.8:27017')
-	db = client['music']  #¿ï¾Üdatabase
-	# collect = db['guitar_pattern']  #¿ï¾Üdatabase.collection
-	# collect = db['guitar_pattern_with_track']  #¿ï¾Üdatabase.collection
+	db = client['music']  #é¸æ“‡database
+	# collect = db['guitar_pattern']  #é¸æ“‡database.collection
+	# collect = db['guitar_pattern_with_track']  #é¸æ“‡database.collection
 	
 	guitar_collection_number = [key[:2] for key in dicts][0]
 	
 	if (str(guitar_collection_number) in guitar_dict.keys()):
 		guitar_collection = guitar_dict[str(guitar_collection_number)]
-		collect = db[guitar_collection]  #¿ï¾Üdatabase.collection
+		collect = db[guitar_collection]  #é¸æ“‡database.collection
 		
 		if int(guitar_collection_number) == 24:
 		
 			id_24_count = keyword['id_'+str(guitar_collection_number)+'_count']
-			#insert_one¤¤¶¡ªº¬Osingle_track or multi_track
+			#insert_oneä¸­é–“çš„æ˜¯single_track or multi_track
 			for key,value in Measure_dict_reverse.items():
 				collect.insert_one({'_id':id_24_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
 				id_24_count += 1
@@ -154,7 +154,7 @@ def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword):
 		elif int(guitar_collection_number) == 25:
 		
 			id_25_count = keyword['id_'+str(guitar_collection_number)+'_count']
-			#insert_one¤¤¶¡ªº¬Osingle_track or multi_track
+			#insert_oneä¸­é–“çš„æ˜¯single_track or multi_track
 			for key,value in Measure_dict_reverse.items():
 				collect.insert_one({'_id':id_25_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
 				id_25_count += 1
@@ -162,7 +162,7 @@ def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword):
 		elif int(guitar_collection_number) == 26:
 			
 			id_26_count = keyword['id_'+str(guitar_collection_number)+'_count']
-			#insert_one¤¤¶¡ªº¬Osingle_track or multi_track
+			#insert_oneä¸­é–“çš„æ˜¯single_track or multi_track
 			for key,value in Measure_dict_reverse.items():
 				collect.insert_one({'_id':id_26_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
 				id_26_count += 1
@@ -170,7 +170,7 @@ def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword):
 		elif int(guitar_collection_number) == 27:
 			
 			id_27_count = keyword['id_'+str(guitar_collection_number)+'_count']
-			#insert_one¤¤¶¡ªº¬Osingle_track or multi_track
+			#insert_oneä¸­é–“çš„æ˜¯single_track or multi_track
 			for key,value in Measure_dict_reverse.items():
 				collect.insert_one({'_id':id_27_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
 				id_27_count += 1
@@ -178,7 +178,7 @@ def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword):
 		elif int(guitar_collection_number) == 28:
 			
 			id_28_count = keyword['id_'+str(guitar_collection_number)+'_count']
-			#insert_one¤¤¶¡ªº¬Osingle_track or multi_track
+			#insert_oneä¸­é–“çš„æ˜¯single_track or multi_track
 			for key,value in Measure_dict_reverse.items():
 				collect.insert_one({'_id':id_28_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
 				id_28_count += 1
@@ -186,7 +186,7 @@ def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword):
 		elif int(guitar_collection_number) == 29:
 			
 			id_29_count = keyword['id_'+str(guitar_collection_number)+'_count']
-			#insert_one¤¤¶¡ªº¬Osingle_track or multi_track
+			#insert_oneä¸­é–“çš„æ˜¯single_track or multi_track
 			for key,value in Measure_dict_reverse.items():
 				collect.insert_one({'_id':id_29_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
 				id_29_count += 1
@@ -194,7 +194,7 @@ def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword):
 		elif int(guitar_collection_number) == 30:
 			
 			id_30_count = keyword['id_'+str(guitar_collection_number)+'_count']
-			#insert_one¤¤¶¡ªº¬Osingle_track or multi_track
+			#insert_oneä¸­é–“çš„æ˜¯single_track or multi_track
 			for key,value in Measure_dict_reverse.items():
 				collect.insert_one({'_id':id_30_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
 				id_30_count += 1
@@ -202,7 +202,7 @@ def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword):
 		elif int(guitar_collection_number) == 31:
 			
 			id_31_count = keyword['id_'+str(guitar_collection_number)+'_count']
-			#insert_one¤¤¶¡ªº¬Osingle_track or multi_track
+			#insert_oneä¸­é–“çš„æ˜¯single_track or multi_track
 			for key,value in Measure_dict_reverse.items():
 				collect.insert_one({'_id':id_31_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
 				id_31_count += 1
@@ -210,7 +210,7 @@ def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword):
 		elif int(guitar_collection_number) == 84:
 			
 			id_84_count = keyword['id_'+str(guitar_collection_number)+'_count']
-			#insert_one¤¤¶¡ªº¬Osingle_track or multi_track
+			#insert_oneä¸­é–“çš„æ˜¯single_track or multi_track
 			for key,value in Measure_dict_reverse.items():
 				collect.insert_one({'_id':id_84_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
 				id_84_count += 1
@@ -224,20 +224,21 @@ def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword):
 		return count_dicts
 		
 	else:
-		print "½Ğ­«·s¿ï¾Üguitar_pattern¡A{}".decode('cp950').format(guitar_dict.keys())
+		print "è«‹é‡æ–°é¸æ“‡guitar_patternï¼Œ{}".decode('cp950').format(guitar_dict.keys())
+		break
 
-#±qmongodb¨ú¥X
+#å¾mongodbå–å‡º
 def Get_guitar_from_mongodb(**keyword):
 	client = MongoClient('mongodb://10.120.30.8:27017')
-	db = client['music']  #¿ï¾Üdatabase
-	# collect = db['guitar_pattern']  #¿ï¾Üdatabase.collection
-	# collect = db['guitar_pattern_with_track']  #¿ï¾Üdatabase.collection
+	db = client['music']  #é¸æ“‡database
+	# collect = db['guitar_pattern']  #é¸æ“‡database.collection
+	# collect = db['guitar_pattern_with_track']  #é¸æ“‡database.collection
 
 	get_key = keyword['get_key']
 	
 	if (str(get_key) in guitar_dict.keys()):
 		guitar_collection = guitar_dict[str(get_key)]
-		collect = db[guitar_collection]  #¿ï¾Üdatabase.collection
+		collect = db[guitar_collection]  #é¸æ“‡database.collection
 		
 		cursor = collect.find({})
 		guitar_list = list()
@@ -246,25 +247,25 @@ def Get_guitar_from_mongodb(**keyword):
 		return guitar_list
 		
 	else:
-		print "½Ğ­«·s¿ï¾Üguitar_pattern¡A{}".decode('cp950').format(guitar_dict.keys())
+		print "è«‹é‡æ–°é¸æ“‡guitar_patternï¼Œ{}".decode('cp950').format(guitar_dict.keys())
 
 		
-#guitar¨Ï¥Î¡A§ó·smongodb¥Î¡Agroup
+#guitarä½¿ç”¨ï¼Œæ›´æ–°mongodbç”¨ï¼Œgroup
 def guitar_group_in_mongo(**keyword):
 
 	client = MongoClient('mongodb://10.120.30.8:27017')
-	db = client['music']  #¿ï¾Üdatabase
-# collect = db['guitar_pattern']  #¿ï¾Üdatabase.collection
-# collect = db['guitar_pattern_with_track']  #¿ï¾Üdatabase.collection
+	db = client['music']  #é¸æ“‡database
+# collect = db['guitar_pattern']  #é¸æ“‡database.collection
+# collect = db['guitar_pattern_with_track']  #é¸æ“‡database.collection
 	
 	get_key = keyword['get_key']
 	
 	if (str(get_key) in guitar_dict.keys()):
 		guitar_collection = guitar_dict[str(get_key)]
-		collect = db[guitar_collection]  #¿ï¾Üdatabase.collection
+		collect = db[guitar_collection]  #é¸æ“‡database.collection
 		
 		#single_track
-		#¨Ï¥Îcollect.aggregate¡A®Ä¥Îµ¥¦P©ógroup¡A¥Hmeasureªºpattern·j´M¡A¨Ã¥[Á`¡B±Æ§Ç
+		#ä½¿ç”¨collect.aggregateï¼Œæ•ˆç”¨ç­‰åŒæ–¼groupï¼Œä»¥measureçš„patternæœå°‹ï¼Œä¸¦åŠ ç¸½ã€æ’åº
 		pipeline = [
 					{"$group": {"_id": "$single_track", 
 					"pattern_count": {"$sum": 1}}},
@@ -272,18 +273,18 @@ def guitar_group_in_mongo(**keyword):
 					]
 		pattern_count_from_mongo = list(collect.aggregate(pipeline))
 		
-		#¹ïgroupªºµ²ªG¡A·s¼Wpattern_count field
+		#å°groupçš„çµæœï¼Œæ–°å¢pattern_count field
 		for pattern in pattern_count_from_mongo:
 			if pattern["_id"] != None:
 				collect.update_one({"single_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
 		
-		#§ä¥X¦³single_track field¡A¨Ã¥B¨S¦³pattern_count fieldªºdocument¡A¨Ã§R°£
+		#æ‰¾å‡ºæœ‰single_track fieldï¼Œä¸¦ä¸”æ²’æœ‰pattern_count fieldçš„documentï¼Œä¸¦åˆªé™¤
 		cursor = collect.find({"single_track":{"$exists":True},"pattern_count":{"$exists":False}})
 		for doc in cursor:
 		    collect.delete_one(doc)
 		
 		#multi_track
-		#¨Ï¥Îcollect.aggregate¡A®Ä¥Îµ¥¦P©ógroup¡A¥Hmeasureªºpattern·j´M¡A¨Ã¥[Á`¡B±Æ§Ç
+		#ä½¿ç”¨collect.aggregateï¼Œæ•ˆç”¨ç­‰åŒæ–¼groupï¼Œä»¥measureçš„patternæœå°‹ï¼Œä¸¦åŠ ç¸½ã€æ’åº
 		pipeline = [
 					{"$group": {"_id": "$multi_track", 
 					"pattern_count": {"$sum": 1}}},
@@ -291,17 +292,17 @@ def guitar_group_in_mongo(**keyword):
 					]
 		pattern_count_from_mongo = list(collect.aggregate(pipeline))
 		
-		#¹ïgroupªºµ²ªG¡A·s¼Wpattern_count field
+		#å°groupçš„çµæœï¼Œæ–°å¢pattern_count field
 		for pattern in pattern_count_from_mongo:
 			if pattern["_id"] != None:
 				collect.update_one({"multi_track":pattern["_id"]},{"$set":{"pattern_count": pattern["pattern_count"]}})
 		
-		#§ä¥X¦³multi_track field¡A¨Ã¥B¨S¦³pattern_count fieldªºdocument¡A¨Ã§R°£
+		#æ‰¾å‡ºæœ‰multi_track fieldï¼Œä¸¦ä¸”æ²’æœ‰pattern_count fieldçš„documentï¼Œä¸¦åˆªé™¤
 		cursor = collect.find({"multi_track":{"$exists":True},"pattern_count":{"$exists":False}})
 		for doc in cursor:
 		    collect.delete_one(doc)
 		
-		#¹ï³Ñ¤Uªºdoc¡A¤ñ¹ï_id field¡A¦pªG_id ¤£µ¥©ó i+1¡A«h·s¼Wdoc¡A§R°£ÂÂªºdoc
+		#å°å‰©ä¸‹çš„docï¼Œæ¯”å°_id fieldï¼Œå¦‚æœ_id ä¸ç­‰æ–¼ i+1ï¼Œå‰‡æ–°å¢docï¼Œåˆªé™¤èˆŠçš„doc
 		cursor = collect.find({}).sort("_id", pymongo.ASCENDING)
 		for i,doc in enumerate(cursor):
 			if doc.keys()[2] == "single_track":
@@ -328,7 +329,7 @@ def guitar_group_in_mongo(**keyword):
 			collect.delete_one({"_id":doc["_id"]})
 			id_count += 1
 		
-		#§R°£pattern_count³o­Ófield
+		#åˆªé™¤pattern_counté€™å€‹field
 		# cursor = collect.find({"single_track":{"$exists":True},"pattern_count":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
 		# for doc in cursor:
 			# collect.update_one({"_id":doc["_id"]},{"$unset":{"pattern_count": doc["pattern_count"]}})
@@ -338,20 +339,20 @@ def guitar_group_in_mongo(**keyword):
 			# collect.update_one({"_id":doc["_id"]},{"$unset":{"pattern_count": doc["pattern_count"]}})
 		
 	else:
-		print "½Ğ­«·s¿ï¾Üguitar_pattern¡A{}".decode("cp950").format(guitar_dict.keys())
+		print "è«‹é‡æ–°é¸æ“‡guitar_patternï¼Œ{}".decode("cp950").format(guitar_dict.keys())
 			
-#guitar¨Ï¥Î¡A§ó·smongodb¥Î¡A­pºâduration_count
+#guitarä½¿ç”¨ï¼Œæ›´æ–°mongodbç”¨ï¼Œè¨ˆç®—duration_count
 def add_duration_count_in_mongo(**keyword):
 	
 	client = MongoClient('mongodb://10.120.30.8:27017')
-	db = client['music']  #¿ï¾Üdatabase
+	db = client['music']  #é¸æ“‡database
 	
 	get_key = keyword['get_key']
 	
-	#¹ïcollect±Æ§Ç¡A§âtrack0ªºmeasure¨ú¥X¡AÂà´«¨C­Ómeasure¡A¥[Á`duration¡A¦A¨Ì±Æ§Ç§ó·scollect
+	#å°collectæ’åºï¼ŒæŠŠtrack0çš„measureå–å‡ºï¼Œè½‰æ›æ¯å€‹measureï¼ŒåŠ ç¸½durationï¼Œå†ä¾æ’åºæ›´æ–°collect
 	if (str(get_key) in guitar_dict.keys()):
 		guitar_collection = guitar_dict[str(get_key)]
-		collect = db[guitar_collection]  #¿ï¾Üdatabase.collection
+		collect = db[guitar_collection]  #é¸æ“‡database.collection
 		
 		cursor = collect.find({"single_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
 		duration_count_list = [value.replace(";",",").split(",") for doc in cursor for key,value in doc["single_track"].items() if key == "track0"]
@@ -370,9 +371,9 @@ def add_duration_count_in_mongo(**keyword):
 			collect.update_one({"_id":doc["_id"]},{"$set":{"duration_count": duration_count_list[i]}})
 			
 	else:
-		print "½Ğ­«·s¿ï¾Üguitar_pattern¡A{}".decode("cp950").format(guitar_dict.keys())
+		print "è«‹é‡æ–°é¸æ“‡guitar_patternï¼Œ{}".decode("cp950").format(guitar_dict.keys())
 			
-#¥H¤U¨â­Ódef¡A·f°t add_duration_count_in_mongo ¨Ï¥Î
+#ä»¥ä¸‹å…©å€‹defï¼Œæ­é… add_duration_count_in_mongo ä½¿ç”¨
 def Transfer_type_int_or_Decimal(Measure_element):
     if "." in Measure_element:
         return Decimal(Measure_element)

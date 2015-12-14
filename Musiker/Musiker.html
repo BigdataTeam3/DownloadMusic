@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<HTML>
+	<HEAD>
+		<meta charset="UTF-8">
+		<link rel="img/icon.png" id="favicon" href="favicon.png">
+		<link rel="stylesheet" href="css/normalize.css">
+		<link rel="stylesheet" href="css/musiker.css">
+		<link rel="stylesheet" href="css/animate.css">
+		<script src="js/jquery.js"></script>
+		<script src="js/jQueryRotate.js"></script>
+		<script>
+		$(function() {
+	    var $rota = $("#PlayStop")
+    	$rota.click(function(){
+        var $this = $("#imggrecord>img");
+
+        if($this.data('rotating')){
+            clearInterval($this.data('rotating'));
+            $this.data('rotating', false)
+        } else {
+            $this.data('rotating', setInterval(function(){
+                var degree = $this.data('degree') || 0;
+                $this.css({ transform: 'rotate(' + degree + 'deg)'});
+                $this.data('degree', ++degree)
+            }, 5));
+    	    }
+    		});
+		});
+		</script>
+	<title>Musiker</title>
+	<style>
+    body{
+      max-width:100%;
+      height: 681px;
+      /*background: #000 url("img/backgroundimg_A.png") center center fixed no-repeat;*/
+      background: #000 url("img/backgroundimg_B.png") center center fixed no-repeat;
+      /*opacity:0.7;*/
+      background-repeat: no-repeat;
+      margin:0;
+      padding:0;
+      -moz-background-size: cover;
+      background-size: cover;
+   	 }
+ 	 </style>
+	</HEAD>
+	<BODY>
+		<div id="wrapper">
+			<header>
+				<h1>Musiker</h1>
+			</header>
+			<section id="sectionA">
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ornare varius ante, vitae suscipit magna interdum id. Suspendisse portttor lectus sit amet arcu sodales, sed efficitur eros placerat. Curabitur eget nulla libero. Donec in semper enim, eget laoreet mauris. Nullam dapibus, nisi eget tristique efficitur, eros nisi eleifend lacus, nec suscipit ex ante eget velit. Mauris ac metus et massa aliquam dignissim. Quisque in laoreet diam. Etiam iaculis fermentuim efficitur.</p>
+			<div ="AtoB">
+				<a href="#sectionB">Create Now</a>
+			</div>
+			</section>
+			<section id="sectionB">
+				<div id="imgbuttom"><img src="img/playerbuttom.png" height="596" style="z-index:1;" ></div>
+				<div id="imggrecord"><img src="img/grecordF.png" width="565" style="z-index:2;"></div>
+				<div id="imgtop"><img src="img/playertop.png" height="596" style="z-index:3;"></div>
+				<section id="sectionC">
+					<h3>select the type you like</h3>
+					<div class="checkbox">
+					<div>
+				    	<input type="checkbox" id="MusicStyleA" name="Musicstyle">
+				    	<label for="MusicStyleA">MusicStyleA</label>
+					</div>
+					<div>
+				    	<input type="checkbox" id="MusicStyleB" name="Musicstyle">
+				    	<label for="MusicStyleB">MusicStyleB</label>
+					</div>
+				    <div>
+				    	<input type="checkbox" id="MusicStyleC" name="Musicstyle">
+				    	<label for="MusicStyleC">MusicStyleC</label>
+					</div>
+					<div>
+				    	<input type="checkbox" id="MusicStyleD" name="Musicstyle">
+				    	<label for="MusicStyleD">MusicStyleD</label>
+					</div>
+					<div>
+				    	<input type="checkbox" id="MusicStyleE" name="Musicstyle">
+				    	<label for="MusicStyleE">MusicStyleE</label>
+					</div>
+					<div>
+				    	<input type="checkbox" id="MusicStyleF" name="Musicstyle">
+				    	<label for="MusicStyleF">MusicStyleF</label>
+					</div>
+				    <div>
+				    	<input type="checkbox" id="MusicStyleG" name="Musicstyle">
+				    	<label for="MusicStyleG">MusicStyleG</label>
+					</div>
+				    <div>
+				    	<input type="checkbox" id="MusicStyleH" name="Musicstyle">
+				    	<label for="MusicStyleH">MusicStyleH</label>
+					</div>
+				    <div>
+				    	<input type="checkbox" id="MusicStyleI" name="Musicstyle">
+				    	<label for="MusicStyleI">MusicStyleI</label>
+					</div>
+				    <div>
+				    	<input type="checkbox" id="MusicStyleJ" name="Musicstyle">
+				    	<label for="MusicStyleJ">MusicStyleJ</label>
+					</div>
+					
+					<audio id="myTune">
+                    <source src="Kalimba.mp3">
+  
+                    </audio>
+ 
+                    <button onclick="document.getElementById('myTune').play()">Play Music</button>
+                    
+                    <button onclick="document.getElementById('myTune').pause(); document.getElementById('myTune').currentTime = 0;">Stop Music</button>
+
+
+
+
+					
+				</div>
+				</section>
+			</section>
+			<footer>
+				<p>
+				Musiker &copy; copyright 2015 | all rights reserved.
+				</p>
+			</footer>
+		</div>
+	</BODY>
+</HTML>
+<!--template.html-->

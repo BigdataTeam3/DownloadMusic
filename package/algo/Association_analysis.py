@@ -173,7 +173,7 @@ def Get_percussion_from_mongodb(get_key,seed=None):
 			print ran
 			record = collect.find_one({'_id':ran})
 			ducount = record['duration_count']
-			s = record['C_pattern']
+			s = str(record['C_pattern'])
 		return record['C_pattern']
 	
 	else:

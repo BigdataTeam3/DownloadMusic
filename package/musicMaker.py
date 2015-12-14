@@ -11,6 +11,7 @@ from algo.Association_analysis import Get_percussion_from_mongodb as getP
 from algo.Taking_Grams import getGrams as ggr
 from algo.CombineToSheet import staffToSheet
 from pitched.AccompanyMelody import accompanyMelody as aM
+from pitched.AccompanyMelody import accompanyMelody_test as aM_test
 from pitched.Choidmaker import Choidmaker as maker
 from pitched.Instrument import Instrument
 from pitched.guitar_decide import patternChosen as pch
@@ -56,6 +57,7 @@ class MusicCreator:
 		grams = ggr(gramPatterns,seed=seed)
 		print 'Chosen gram : '+ str(grams)
 		self.chordPattern = grams
+		return grams
 	def setChords(self,notations):
 		self.chordPattern = notations
 
@@ -117,9 +119,9 @@ class MusicCreator:
 		rhymes = [MeasureObject(tempdic[key]) for key in notations]
 		oneMeasureChords = map(lambda x,y:[x]+[y],self.chordPattern[::2],self.chordPattern[1::2])
 		if 'single' in type.lower():
-			preparedPatterns = map(lambda measure,chords:MeasureObject(aM(measure.content,chords)),rhymes,oneMeasureChords)
+			preparedPatterns = map(lambda r,chords:MeasureObject(aM_test(r.content,chords)),rhymes,oneMeasureChords)
 		else:
-			preparedPatterns = map(lambda measure,chords:MeasureObject(Dong(chords,measure.content)),rhymes,oneMeasureChords)
+			preparedPatterns = map(lambda r,chords:MeasureObject(Dong(chords,r.content)),rhymes,oneMeasureChords)
 		return preparedPatterns
 
 	
@@ -160,9 +162,20 @@ class MusicCreator:
 		print self.usedTracks
 		return preparedPatterns
 		
-
-
-	def addStaff(self,mclist,instrument,solo=False,staffid=None):
+	def addLongStaffByChords(self,instrument,match=None):
+		chords = self.chordPattern
+		oneMeasureChords = map(lambda x,y:[x]+[y],chords[::2],chords[1::2])
+		if match:
+			oneMeasureChords = map(lambda m,chord:chord if m == '0' else ['0','0'],match,oneMeasureChords)
+		mclist = []
+		for chord in oneMeasureChords:
+			if chord[0]==chord[1]:
+				mclist.append(MeasureObject(aM({'track0':'1,1'},chord)))
+			else:
+				mclist.append(MeasureObject(aM({'track0':'0.5,1;0.5,1'},chord)))
+		self.addStaff(mclist,instrument)
+		
+	def addStaff(self,mclist,instrument,velo=100,solo=False,staffid=None):
 		if staffid is not None and staffid in self.usedStaffs:
 			print 'Staff id in use.'
 			return None
@@ -171,10 +184,11 @@ class MusicCreator:
 			self.usedStaffs.add(staffid)
 			num = len([mc.content for mc in mclist])
 			if instrument == 'percussionType' and solo==False:
+				velo=65
 				tmplistc = []
 				for mc in mclist:
 					tmplistc.append({'staff'+str(staffid):mc.content})
-				sta = StaffObject(num_of_measures=num,instrument=instrument,content=pc(tmplistc))
+				sta = StaffObject(num_of_measures=num,instrument=instrument,content=pc(tmplistc,velo))
 				self.staffContents.update({'staff'+str(staffid):sta})
 				
 				staffid += 1
@@ -193,15 +207,11 @@ class MusicCreator:
 						bass_list.append(tmpdic)
 				oneMeasureChords = map(lambda x,y:[x]+[y],self.chordPattern[::2],self.chordPattern[1::2])
 
-				pps = map(lambda measure,chords:MeasureObject(addBass(measure,chords)),bass_list,oneMeasureChords)
-				for measure in pps:
-					print measure.content
-					print '---------------------'
-				
+				pps = map(lambda measure,chords:MeasureObject(addBass(measure,chords)),bass_list,oneMeasureChords)				
 				tmplistc = []
 				for mc in pps:
 					tmplistc.append({'staff'+str(staffid):mc.content})
-				sta = StaffObject(num_of_measures=num,instrument='0',content=pc(tmplistc))
+				sta = StaffObject(num_of_measures=num,instrument='0',content=pc(tmplistc,velo))
 				self.staffContents.update({'staff'+str(staffid):sta})
 				print 'Autometically add staff'+str(staffid)+': Bass'
 				
@@ -209,7 +219,7 @@ class MusicCreator:
 				tmplistc = []
 				for mc in mclist:
 					tmplistc.append({'staff'+str(staffid):mc.content})
-				sta = StaffObject(num_of_measures=num,instrument=instrument,content=pc(tmplistc))
+				sta = StaffObject(num_of_measures=num,instrument=instrument,content=pc(tmplistc,velo))
 				self.staffContents.update({'staff'+str(staffid):sta})
 				
 			else:

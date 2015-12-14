@@ -18,7 +18,7 @@ BDic = {Decimal('0.03125'): '32nd', Decimal('0.25'): 'quarter',
 
 # In[11]:
 
-def Percussion (testkey):
+def Percussion (testkey,velo):
     stafflist = map(lambda x :x.keys()[0],testkey)
     stafflist = list(set(stafflist))
     timesigN = 4
@@ -35,7 +35,7 @@ def Percussion (testkey):
             s = x[stafflist[stfno]].copy()
             tkno =0                               # track number = tkno
             tkvalue = s.pop('track0')
-            bag.append(PercussionUnit(tkno,tkvalue))
+            bag.append(PercussionUnit(tkno,tkvalue,velo))
             if len(s) > 0:
                 tick = bag.new_tag('tick')       # 建構Division tag
                 tick.string= str(Division*timesigN*(i-1))               # Division 480 * timesigN * measure number
@@ -43,7 +43,7 @@ def Percussion (testkey):
             for track in s.keys():
                 tkno = int(track.split('k')[-1])
                 tkvalue = x[stafflist[stfno]][track]
-                bag.append(PercussionUnit(tkno,tkvalue))
+                bag.append(PercussionUnit(tkno,tkvalue,velo))
             mes.select('Measure')[i-1].append(bag)
             i += 1
         newM.select('Staff')[stfno].append(mes)
@@ -52,7 +52,7 @@ def Percussion (testkey):
 
 # In[12]:
 
-def PercussionUnit(tkno,tkvalue):
+def PercussionUnit(tkno,tkvalue,velo):
     Measure = [] ; Mli = [];a=[]
     for tkc in  tkvalue.split(';'):
         b = tkc.split(',').pop(0)
@@ -75,16 +75,16 @@ def PercussionUnit(tkno,tkvalue):
     New = bs('')
     for a in range(0,len(addB)):
         if tkno == 0:
-            New.append(Tchord(tkno,addB[a]))
+            New.append(Tchord(tkno,addB[a],velo))
         elif tkno !=0:
-            New.append(Tchord(tkno,addB[a]))
+            New.append(Tchord(tkno,addB[a],velo))
     return New
         
 
 
 # In[13]:
 
-def Tchord(tkno,x):
+def Tchord(tkno,x,velo):
     ccc = bs("")
     if (x[0][0] == str(0) and x[1]=='whole'):
         TagR = bs("")
@@ -137,7 +137,7 @@ def Tchord(tkno,x):
             Ttpc.string="22"
             Ctag.select('Note')[i].append(Ttpc)
             Tvelo = Ctag.new_tag("velocity")
-            Tvelo.string="100"
+            Tvelo.string=str(velo)
             Ctag.select('Note')[i].append(Tvelo)
             TvT = Ctag.new_tag("veloType")
             TvT.string="user"

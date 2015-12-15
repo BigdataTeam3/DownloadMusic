@@ -122,7 +122,7 @@ def	Insert_piano_to_mongodb(dicts,Measure_dict_reverse):
 	# collect = db['Piano_pattern_with_track']  #¿ï¾Üdatabase.collection
 	
 	# keyword_dict = dict(keyword)
-	piano_collection_number = [key[:1] for key in final_dict][0]
+	piano_collection_number = [key[:1] for key in dicts][0]
 	
 	if (str(piano_collection_number) in Piano_dict.keys()):
 		piano_collection = Piano_dict[str(piano_collection_number)]

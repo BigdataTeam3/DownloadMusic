@@ -194,10 +194,10 @@ def Get_dominant_from_mongodb(**keyword):
 	
 	if int(N_gram_number) in chord_list:
 		cursor = collect.find({str(N_gram_number)+'_gram':{'$exists':True}})
-		Gram_list = list()
+		chord_return_list = list()
 		for doc in cursor:
-			Gram_list.append(doc[str(N_gram_number)+'_gram'])
-		return Gram_list
+			chord_return_list.append(doc[str(N_gram_number)+'_gram'])
+		return chord_return_list
 		
 	else:
 		print "請重新選擇chord_pattern，{}".decode('cp950').format(chord_list)

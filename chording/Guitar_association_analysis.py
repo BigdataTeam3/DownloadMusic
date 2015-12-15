@@ -169,10 +169,10 @@ def Get_guitar_from_mongodb(**keyword):
 		collect = db[guitar_collection]  #選擇database.collection
 		
 		cursor = collect.find({})
-		guitar_list = list()
+		guitar_return_list = list()
 		for doc in cursor:
-			guitar_list.append(doc)
-		return guitar_list
+			guitar_return_list.append(doc)
+		return guitar_return_list
 		
 	else:
 		print "請重新選擇guitar_pattern，{}".decode('cp950').format(guitar_dict.keys())

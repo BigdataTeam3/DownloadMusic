@@ -137,6 +137,7 @@ def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword):
 	# collect = db['guitar_pattern']  #¿ï¾Üdatabase.collection
 	# collect = db['guitar_pattern_with_track']  #¿ï¾Üdatabase.collection
 	
+	keyword_dict = dict(keyword)
 	guitar_collection_number = [key[:2] for key in dicts][0]
 	
 	if (str(guitar_collection_number) in guitar_dict.keys()):
@@ -149,7 +150,7 @@ def	Insert_guitar_to_mongodb(dicts,Measure_dict_reverse,**keyword):
 			collect.insert_one({'_id':id_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
 			id_count += 1
 		
-		keyword_dict = {"id_"+str(guitar_collection_number)+"_count":id_count}
+		keyword_dict.update({"id_"+str(guitar_collection_number)+"_count":id_count})
 				
 		return keyword_dict
 

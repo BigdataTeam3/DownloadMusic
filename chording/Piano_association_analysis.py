@@ -22,11 +22,9 @@ Piano_dict = {
     '8':'Piano_celesta'
 }
 
-
-
 # 轉換drum的每一個 Measure，轉成標籤 by Henry
 # 第一個參數是dicts，第二個跟第三個參數是轉換標籤的比率，例0.1 or 0.2
-def Association_analysis_mainfunction(dicts,**keyword):
+def Association_analysis_mainfunction(dicts):
 
     percent_value = 0.19
     Measure_lists = Measure_extract_from_dictdata(dicts)
@@ -41,12 +39,9 @@ def Association_analysis_mainfunction(dicts,**keyword):
 #     print Measure_dict
 #     print order_value
     Measure_dict_reverse = Transfer_dictdata(dicts,Measure_dict)
-	# print Transfer_list
-    keyword_dict = Insert_piano_to_mongodb(dicts,Measure_dict_reverse,**keyword)
-	
-    return keyword_dict
+    # print Transfer_list
+    Insert_piano_to_mongodb(dicts,Measure_dict_reverse)
 
-	
 # 先將lists of dicts 的value取出來，以一個Measure為單位，建立lists，
 # 如果有多個track在同一個Measure，合併到同一個lists裡面	
 def Measure_extract_from_dictdata(dicts):
@@ -119,30 +114,31 @@ def Transfer_dictdata(dicts,measure_dict):
 
 
 # 塞進mongodb
-def	Insert_piano_to_mongodb(dicts,Measure_dict_reverse,**keyword):
+def	Insert_piano_to_mongodb(dicts,Measure_dict_reverse):
 
 	client = MongoClient('mongodb://10.120.30.8:27017')
 	db = client['music']  #選擇database
 	# collect = db['Piano_pattern']  #選擇database.collection
 	# collect = db['Piano_pattern_with_track']  #選擇database.collection
 	
-	keyword_dict = dict(keyword)
+	# keyword_dict = dict(keyword)
 	piano_collection_number = [key[:1] for key in final_dict][0]
 	
 	if (str(piano_collection_number) in Piano_dict.keys()):
 		piano_collection = Piano_dict[str(piano_collection_number)]
 		collect = db[piano_collection]  #選擇database.collection
 		
-		id_count = keyword['id_'+str(piano_collection_number)+'_count']
+		# id_count = keyword['id_'+str(guitar_collection_number)+'_count']
 		#insert_one中間的是single_staff or multi_staff
 		for key,value in Measure_dict_reverse.items():
-			collect.insert_one({'_id':id_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
-			id_count += 1
+			collect.insert_one({value.keys()[0]:value.values()[0],'pattern':key[0]})
+			# collect.insert_one({'_id':id_count,value.keys()[0]:value.values()[0],'pattern':key[0]})
+			# id_count += 1
 		
-		keyword_dict.update({"id_"+str(piano_collection_number)+"_count":id_count})
+		# keyword_dict.update({"id_"+str(guitar_collection_number)+"_count":id_count})
 				
-		return keyword_dict
-
+		# return keyword_dict
+		
 
 #從mongodb取出
 def Get_piano_from_mongodb(**keyword):
@@ -218,33 +214,6 @@ def piano_group_in_mongo(**keyword):
 		cursor = collect.find({"multi_staff":{"$exists":True},"pattern_count":{"$exists":False}})
 		for doc in cursor:
 		    collect.delete_one(doc)
-		
-		#對剩下的doc，比對_id field，如果_id 不等於 i+1，則新增doc，刪除舊的doc
-		cursor = collect.find({}).sort("_id", pymongo.ASCENDING)
-		for i,doc in enumerate(cursor):
-			if doc.keys()[2] == "single_staff":
-				newdoc = {"_id":str(i+1)+"_single","single_staff":doc["single_staff"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-			elif doc.keys()[2] == "multi_staff":
-				newdoc = {"_id":str(i+1)+"_multi","multi_staff":doc["multi_staff"],"pattern":doc["pattern"]}
-				collect.insert_one(newdoc)
-				collect.delete_one({"_id":doc["_id"]})
-		
-		id_count = 1
-		cursor = collect.find({"single_staff":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"single_staff":doc["single_staff"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
-		
-		cursor = collect.find({"multi_staff":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		for doc in cursor:
-			newdoc = {"_id":id_count,"multi_staff":doc["multi_staff"],"pattern":doc["pattern"]}
-			collect.insert_one(newdoc)
-			collect.delete_one({"_id":doc["_id"]})
-			id_count += 1
 		
 		#刪除pattern_count這個field
 		# cursor = collect.find({"single_staff":{"$exists":True},"pattern_count":{"$exists":True}}).sort("_id", pymongo.ASCENDING)

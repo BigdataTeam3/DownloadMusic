@@ -230,7 +230,7 @@ def add_duration_count_in_mongo(**keyword):
 		collect = db[percussion_collection]  #選擇database.collection
 		
 		cursor = collect.find({}).sort('_id', pymongo.ASCENDING)
-		duration_count_list = [value.replace(';',',').split(',') for docs in cursor for key,value in docs[str(get_key)+'_pattern'].items() if key == 'track0']
+		duration_count_list = [doc[str(get_key)+'_pattern'].values()[0].replace(';',',').split(',') for docs in cursor]
 		duration_count_list = [[Transfer_type_int_or_float(j) for j in i] for i in duration_count_list]
 		duration_count_list = duration_value_count(duration_count_list)
 		

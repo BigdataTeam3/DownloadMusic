@@ -283,7 +283,7 @@ def add_duration_count_in_mongo(**keyword):
 		collect = db[guitar_collection]  #¿ï¾Üdatabase.collection
 		
 		cursor = collect.find({"single_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(";",",").split(",") for doc in cursor for key,value in doc["single_track"].items() if key == "track0"]
+		duration_count_list = [doc['single_track'].values()[0].replace(";",",").split(",") for doc in cursor]
 		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
 		duration_count_list = duration_value_count(duration_count_list)
 		cursor = collect.find({"single_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
@@ -291,7 +291,7 @@ def add_duration_count_in_mongo(**keyword):
 			collect.update_one({"_id":doc["_id"]},{"$set":{"duration_count": duration_count_list[i]}})
 		
 		cursor = collect.find({"multi_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)
-		duration_count_list = [value.replace(";",",").split(",") for doc in cursor for key,value in doc["multi_track"].items() if key == "track0"]
+		duration_count_list = [doc['multi_track'].values()[0].replace(";",",").split(",") for doc in cursor]
 		duration_count_list = [[Transfer_type_int_or_Decimal(j) for j in i] for i in duration_count_list]
 		duration_count_list = duration_value_count(duration_count_list)
 		cursor = collect.find({"multi_track":{"$exists":True}}).sort("_id", pymongo.ASCENDING)

@@ -36,11 +36,12 @@ def Percussion (testkey,velo):
             tkno =0                               # track number = tkno
             tkvalue = s.pop('track0')
             bag.append(PercussionUnit(tkno,tkvalue,velo))
-            if len(s) > 0:
-                tick = bag.new_tag('tick')       # 建構Division tag
-                tick.string= str(Division*timesigN*(i-1))               # Division 480 * timesigN * measure number
-                bag.append(tick)
+            
             for track in s.keys():
+                if len(s) > 0:
+                    tick = bag.new_tag('tick')       # 建構Division tag
+                    tick.string= str(Division*timesigN*(i-1))               # Division 480 * timesigN * measure number
+                    bag.append(tick)
                 tkno = int(track.split('k')[-1])
                 tkvalue = x[stafflist[stfno]][track]
                 bag.append(PercussionUnit(tkno,tkvalue,velo))

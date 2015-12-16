@@ -55,7 +55,6 @@ class MusicCreator:
 		self.chordPattern = None
 	def determineChords(self,gramPatterns,seed=None):
 		grams = ggr(gramPatterns,seed=seed)
-		print 'Chosen gram : '+ str(grams)
 		self.chordPattern = grams
 		return grams
 	def setChords(self,notations):
@@ -162,7 +161,7 @@ class MusicCreator:
 		print self.usedTracks
 		return preparedPatterns
 		
-	def addLongStaffByChords(self,instrument,match=None):
+	def addLongStaffByChords(self,instrument,match=None,velo=100):
 		chords = self.chordPattern
 		oneMeasureChords = map(lambda x,y:[x]+[y],chords[::2],chords[1::2])
 		if match:
@@ -173,7 +172,7 @@ class MusicCreator:
 				mclist.append(MeasureObject(aM({'track0':'1,1'},chord)))
 			else:
 				mclist.append(MeasureObject(aM({'track0':'0.5,1;0.5,1'},chord)))
-		self.addStaff(mclist,instrument)
+		self.addStaff(mclist,instrument,velo=velo)
 		
 	def addStaff(self,mclist,instrument,velo=100,solo=False,staffid=None):
 		if staffid is not None and staffid in self.usedStaffs:
@@ -226,7 +225,7 @@ class MusicCreator:
 				tmplistc = []
 				for mc in mclist:
 					tmplistc.append({'staff'+str(staffid):mc.content})
-				sta = StaffObject(num_of_measures=num,instrument=Instrument.getInstrumentId(instrument),content=maker(tmplistc))
+				sta = StaffObject(num_of_measures=num,instrument=Instrument.getInstrumentId(instrument),content=pc(tmplistc,velo))
 				self.staffContents.update({'staff'+str(staffid):sta})
 
 	def createSheet(self):
